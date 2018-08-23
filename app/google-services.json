@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "822249283009",
+    "firebase_url": "https://appterapias-c2730.firebaseio.com",
+    "project_id": "appterapias-c2730",
+    "storage_bucket": "appterapias-c2730.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:822249283009:android:cff26b63537cb632",
+        "android_client_info": {
+          "package_name": "aplication.android.wimervm.appterapias"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "822249283009-vcvspb5j84dc5046bb9p2f934nsdmasu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "aplication.android.wimervm.appterapias",
+            "certificate_hash": "fd4c085a10e321734860dcf1acc011337ea839f8"
+          }
+        },
+        {
+          "client_id": "822249283009-u1gj46n7cbfmi3ibj16tannm456amrci.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtvDPZrsUFyJifzYqKaSVwAN_76e-dNHM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "822249283009-u1gj46n7cbfmi3ibj16tannm456amrci.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
