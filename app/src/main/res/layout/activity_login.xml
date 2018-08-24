@@ -12,29 +12,31 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:alpha="0.6"
+        android:alpha="0.4"
         android:background="#000000" />
 
     <TextView
-        android:id="@+id/tvCorreoELectronico"
+        android:id="@+id/tvCorreoHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="85dp"
-        android:fontFamily="serif"
+        android:layout_marginTop="109dp"
+        android:fontFamily="cursive"
         android:text="App Terapias"
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#FFFFFF"
-        android:textSize="55dp" />
+        android:textSize="35sp"
+        android:textStyle="italic" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tvCorreoELectronico"
+        android:layout_alignBottom="@+id/tvCorreoHeader"
         android:layout_centerHorizontal="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#FFFFFF"
@@ -70,7 +72,7 @@
         android:drawableLeft="@drawable/llave"
         android:drawablePadding="10dp"
         android:ems="10"
-        android:hint="Escriba su contraseña "
+        android:hint="Escriba su contraseña"
         android:inputType="textPassword"
         android:singleLine="true"
         android:textColor="#FFFFFF"
@@ -78,7 +80,7 @@
         android:textSize="20sp" />
 
     <Button
-        android:id="@+id/btnsignin"
+        android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/txtpass"
@@ -89,14 +91,14 @@
         android:layout_marginTop="6dp"
         android:text="Iniciar Sesion"
         android:textAllCaps="false"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/tvOlvido"
+        android:id="@+id/tv_Olvido"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btnsignin"
+        android:layout_below="@+id/btnLogin"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
         android:text="Olvido su contraseña?        "
