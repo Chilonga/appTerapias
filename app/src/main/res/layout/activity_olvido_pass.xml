@@ -22,14 +22,16 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:background="@android:color/holo_blue_light"
         android:elevation="0dp"
         android:minHeight="185dp"
         android:theme="@style/AppTheme"
         app:contentInsetStart="72dp"
         app:layout_collapseMode="pin"
         app:layout_collapseParallaxMultiplier="0.8"
-        app:popupTheme="@style/AppTheme">
-    </android.support.v7.widget.Toolbar>
+        app:popupTheme="@style/AppTheme"
+        app:theme="@style/Toolbar"
+        app:titleTextColor="@android:color/background_light"></android.support.v7.widget.Toolbar>
 
     <EditText
         android:id="@+id/txtemailcambiar"
@@ -60,23 +62,5 @@
         android:textAllCaps="false"
         android:textColor="@android:color/background_light"
         android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/txt_1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginEnd="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        android:fontFamily="cursive"
-        android:gravity="center_horizontal"
-        android:text="Olvido contraseña"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="40sp"
-        android:textStyle="italic" />
 
 </RelativeLayout>
