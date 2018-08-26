@@ -12,7 +12,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:alpha="0.4"
+        android:alpha="0.1"
         android:background="#000000" />
 
     <android.support.v7.widget.Toolbar
@@ -28,8 +28,8 @@
         app:contentInsetStart="72dp"
         app:layout_collapseMode="pin"
         app:layout_collapseParallaxMultiplier="0.8"
-        app:popupTheme="@style/AppTheme"
-        app:theme="@style/Toolbar"></android.support.v7.widget.Toolbar>
+        app:popupTheme="@style/AppTheme">
+    </android.support.v7.widget.Toolbar>
 
     <EditText
         android:id="@+id/txtemailcambiar"
@@ -46,22 +46,19 @@
         android:ems="10"
         android:hint="Escriba su correo"
         android:inputType="textEmailAddress"
-        android:singleLine="true"
-        android:textColor="#ffffff"
-        android:textColorHint="#cccccc" />
+        android:singleLine="true" />
 
     <Button
         android:id="@+id/btncambiarpass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="20dp"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@android:color/holo_blue_light"
         android:text="Cambiar Contraseña"
         android:textAllCaps="false"
-        android:textColor="@color/colorBlanco"
+        android:textColor="@android:color/background_light"
         android:textSize="18sp" />
 
     <TextView
@@ -79,7 +76,6 @@
         android:gravity="center_horizontal"
         android:text="Olvido contraseña"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#ffffff"
         android:textSize="40sp"
         android:textStyle="italic" />
 

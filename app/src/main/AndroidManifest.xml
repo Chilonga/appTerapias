@@ -16,7 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".olvido_pass"
+        <activity
+            android:name=".olvido_pass"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -25,7 +26,8 @@
         <activity
             android:name=".Pantalla_Principal"
             android:label="Terapias"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Agregar_Clientes"></activity>
     </application>
 
 </manifest>

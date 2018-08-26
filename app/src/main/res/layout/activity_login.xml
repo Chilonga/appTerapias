@@ -12,7 +12,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:alpha="0.4"
+        android:alpha="0.1"
         android:background="#000000" />
 
     <TextView
@@ -22,13 +22,13 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="109dp"
+        android:layout_marginTop="120dp"
         android:fontFamily="cursive"
         android:text="App Terapias"
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#FFFFFF"
+        android:textColor="@android:color/background_dark"
         android:textSize="35sp"
         android:textStyle="italic" />
 
@@ -46,53 +46,59 @@
         android:id="@+id/txtemail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView3"
+        android:layout_below="@+id/tvCorreoHeader"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="47dp"
+        android:layout_marginTop="35dp"
         android:drawableLeft="@drawable/email"
         android:drawablePadding="10dp"
         android:hint="Escriba su correo"
         android:inputType="textEmailAddress"
         android:singleLine="true"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#cccccc"
-        android:textSize="20sp" />
-
-    <EditText
-        android:id="@+id/txtpass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/txtemail"
-        android:layout_alignLeft="@+id/txtemail"
-        android:layout_alignRight="@+id/txtemail"
-        android:layout_alignStart="@+id/txtemail"
-        android:layout_below="@+id/txtemail"
-        android:drawableLeft="@drawable/llave"
-        android:drawablePadding="10dp"
-        android:ems="10"
-        android:hint="Escriba su contraseña"
-        android:inputType="textPassword"
-        android:singleLine="true"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#cccccc"
+        android:textColorLink="@android:color/background_dark"
         android:textSize="20sp" />
 
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/txtpass"
-        android:layout_alignLeft="@+id/txtpass"
-        android:layout_alignRight="@+id/txtpass"
-        android:layout_alignStart="@+id/txtpass"
-        android:layout_below="@+id/txtpass"
-        android:layout_marginTop="6dp"
+        android:layout_below="@+id/laypass"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@android:color/holo_blue_light"
         android:text="Iniciar Sesion"
         android:textAllCaps="false"
-        android:textColor="@android:color/white"
-        android:textSize="20sp" />
+        android:textColor="@android:color/background_light"
+        android:textSize="20sp"
+        tools:ignore="NotSibling" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/laypass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtemail"
+        android:layout_marginBottom="10dp"
+        app:hintEnabled="false"
+        app:passwordToggleContentDescription="description"
+        app:passwordToggleEnabled="true">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/txtpass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:drawablePadding="10dp"
+            android:drawableStart="@drawable/llave"
+            android:hint="Escriba su contraseña"
+            android:inputType="textPassword"
+            android:textColorLink="@android:color/background_dark" />
+
+    </android.support.design.widget.TextInputLayout>
 
     <TextView
         android:id="@+id/tv_Olvido"
@@ -100,10 +106,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnLogin"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:text="Olvido su contraseña?        "
+        android:layout_marginTop="-10dp"
+        android:text="Olvido su contraseña?"
         android:textAlignment="center"
-        android:textColor="#FFFFFF"
+        android:textColor="@android:color/background_dark"
         android:textSize="16sp" />
 
 </RelativeLayout>
