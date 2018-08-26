@@ -37,7 +37,6 @@ public class olvido_pass extends AppCompatActivity implements View.OnClickListen
         setContentView(R.layout.activity_olvido_pass);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.mytoolbar2);
-        toolbar.setTitle("Olvido contraseña");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

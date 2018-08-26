@@ -18,7 +18,8 @@
         </activity>
         <activity
             android:name=".olvido_pass"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="Olvido contraseña">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Login" />
@@ -27,7 +28,10 @@
             android:name=".Pantalla_Principal"
             android:label="Terapias"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Agregar_Clientes"></activity>
+        <activity android:name=".Agregar_Clientes"
+            android:label="Agregar Paciente">
+
+        </activity>
     </application>
 
 </manifest>
