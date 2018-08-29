@@ -2,6 +2,7 @@ package aplication.android.wimervm.appterapias;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -43,18 +45,21 @@ import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class seleccionar_paciente_cita extends AppCompatActivity {
 
     private DatabaseReference pacientesDatabase;
+    private DatabaseReference CitaDatabase;
     FirebaseAuth mAuth;
     private LinearLayoutManager mLayoutManager;
     private RecyclerView mUsersList;
     MaterialSearchView searchView;
     private TextView txtResultado;
     String online_user_id;
-    private DatabaseReference consultaDatabase,HorarioDatabase;
+    private DatabaseReference spinerDatabase;
     private TextView tVNombre,edtFecha;
     private Spinner consultaSpiner,HorarioSpiner;
     final Calendar calendario = Calendar.getInstance();
@@ -62,11 +67,14 @@ public class seleccionar_paciente_cita extends AppCompatActivity {
     int año=calendario.get(Calendar.YEAR);
     int mes=calendario.get(Calendar.MONTH)+1;
     int dias=calendario.get(Calendar.DAY_OF_MONTH);
+    private ProgressDialog mRegProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seleccionar_paciente_cita);
+
+        mRegProgress = new ProgressDialog(this);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.mytoolbar3);
         setSupportActionBar(toolbar);
@@ -77,6 +85,9 @@ public class seleccionar_paciente_cita extends AppCompatActivity {
 
         pacientesDatabase = FirebaseDatabase.getInstance().getReference().child("Pacientes");
         pacientesDatabase.keepSynced(true);
+
+        CitaDatabase = FirebaseDatabase.getInstance().getReference();
+        CitaDatabase.keepSynced(true);
 
         txtResultado = (TextView) findViewById(R.id.textViewResultados8);
 
@@ -200,7 +211,7 @@ public class seleccionar_paciente_cita extends AppCompatActivity {
                             try {
                                 InputMethodManager imm = (InputMethodManager) getApplication().getSystemService(Context.INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
-                                Reservar_Cita(users.getNombre()+ " "+users.getApellido());
+                                Reservar_Cita(users.getNombre()+ " "+users.getApellido(),users.getId());
                             }catch (Exception e){
                                 Toast.makeText(seleccionar_paciente_cita.this, e.toString(), Toast.LENGTH_SHORT).show();
                             }
@@ -215,25 +226,37 @@ public class seleccionar_paciente_cita extends AppCompatActivity {
         }
     }
 
-    public void Reservar_Cita(String nombreyApellido){
+    public void Reservar_Cita(String nombreyApellido, final String idPaciente){
         try{
             LayoutInflater inflater = getLayoutInflater();
             final View dialoglayout = inflater.inflate(R.layout.activity_reservar_citas, null);
-
-            consultaDatabase = FirebaseDatabase.getInstance().getReference().child("Tipo_Consulta");
-            consultaDatabase.keepSynced(true);
-
-            HorarioDatabase = FirebaseDatabase.getInstance().getReference().child("Horario");
-            HorarioDatabase.keepSynced(true);
 
             tVNombre=(TextView)dialoglayout.findViewById(R.id.textNombreCita);
             consultaSpiner=(Spinner)dialoglayout.findViewById(R.id.spinnerConsulta);
             HorarioSpiner=(Spinner)dialoglayout.findViewById(R.id.spinnerHorarioCita);
             edtFecha=(TextView) dialoglayout.findViewById(R.id.editTFechaCita);
+            Button btnReservar=(Button) dialoglayout.findViewById(R.id.buttonReservar);
 
             tVNombre.setText(nombreyApellido);
 
             fecha_calendario= String.valueOf(dias+"/"+mes+"/"+año);
+
+            final String id=idPaciente;
+
+            btnReservar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String hora = HorarioSpiner.getSelectedItem().toString();
+                    String procedimiento = consultaSpiner.getSelectedItem().toString();
+                    String fecha = edtFecha.getText().toString();
+                    mRegProgress.setTitle("Reservando cita");
+                    mRegProgress.setMessage("Espere mientras se reserva la cita!");
+                    mRegProgress.setCanceledOnTouchOutside(false);
+                    mRegProgress.setCancelable(false);
+                    mRegProgress.show();
+                    Agregar_cita(id,hora,procedimiento,fecha);
+                }
+            });
 
             final AlertDialog.Builder builder = new AlertDialog.Builder(seleccionar_paciente_cita.this);
             builder.setView(dialoglayout);
@@ -247,50 +270,60 @@ public class seleccionar_paciente_cita extends AppCompatActivity {
             builder.show();
 
             edtFecha.setText(fecha_calendario);
-            spinerConsulta();
-            spinerHorario();
+            spinerDatos("hora",HorarioSpiner,"Horario");
+            spinerDatos("tipo",consultaSpiner,"Tipo_Consulta");
 
         }catch (Exception e){
-            Toast.makeText(seleccionar_paciente_cita.this,"Error al abrir la fecha",Toast.LENGTH_LONG).show();
+            Toast.makeText(seleccionar_paciente_cita.this,e.toString(),Toast.LENGTH_LONG).show();
         }
     }
 
-    public void spinerHorario(){
+    private void Agregar_cita(String idPaciente, String hora, String procedimiento,String fecha){
         try {
-            HorarioDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            DatabaseReference clientekey = CitaDatabase.child("Citas_Reservadas").push();
 
+            String clientepush = clientekey.getKey();
+
+            final String pacientes = "Citas_Reservadas/" + clientepush;
+
+            Map cita_reg = new HashMap();
+            cita_reg.put("id", clientepush.toString());
+            cita_reg.put("id_paciente", idPaciente);
+            cita_reg.put("hora", hora);
+            cita_reg.put("procedimiento", procedimiento);
+            cita_reg.put("fecha", fecha);
+
+            Map cita_agregado = new HashMap();
+            cita_agregado.put(pacientes, cita_reg);
+
+            CitaDatabase.updateChildren(cita_agregado, new DatabaseReference.CompletionListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    try {
-                        final List<String> areas = new ArrayList<String>();
-
-                        for (DataSnapshot areaSnapshot : dataSnapshot.getChildren()) {
-                            String areaName = areaSnapshot.child("hora").getValue(String.class);
-                            areas.add(areaName);
-                        }
-
-                        ArrayAdapter<String> areasAdapter = new ArrayAdapter<String>(seleccionar_paciente_cita.this, android.R.layout.simple_spinner_item, areas);
-                        areasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        HorarioSpiner.setAdapter(areasAdapter);
-
-                    } catch (Exception e) {
-                        Toast.makeText(seleccionar_paciente_cita.this, "Error al cargar la data", Toast.LENGTH_SHORT).show();
+                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                    if (databaseError != null) {
+                        mRegProgress.hide();
+                        Toast.makeText(seleccionar_paciente_cita.this, "Fallo al reservar la cita. Por favor intentelo de nuevo.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        mRegProgress.dismiss();
+                        Toast.makeText(seleccionar_paciente_cita.this, "Cita reservada", Toast.LENGTH_SHORT).show();
+                        Intent intent = getIntent();
+                        finish();
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(intent);
                     }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Toast.makeText(seleccionar_paciente_cita.this, "Error de la base de datos", Toast.LENGTH_SHORT).show();
                 }
             });
         }catch (Exception e){
-            Toast.makeText(seleccionar_paciente_cita.this, "Error de la base de datos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(seleccionar_paciente_cita.this,"Error al guardar!", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void spinerConsulta(){
+    public void spinerDatos(final String tipo, final Spinner spinner,String child){
         try {
-            consultaDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            spinerDatabase = FirebaseDatabase.getInstance().getReference().child(child);
+            spinerDatabase.keepSynced(true);
+
+            spinerDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
 
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -298,13 +331,13 @@ public class seleccionar_paciente_cita extends AppCompatActivity {
                         final List<String> areas = new ArrayList<String>();
 
                         for (DataSnapshot areaSnapshot : dataSnapshot.getChildren()) {
-                            String areaName = areaSnapshot.child("tipo").getValue(String.class);
+                            String areaName = areaSnapshot.child(tipo).getValue(String.class);
                             areas.add(areaName);
                         }
 
                         ArrayAdapter<String> areasAdapter = new ArrayAdapter<String>(seleccionar_paciente_cita.this, android.R.layout.simple_spinner_item, areas);
                         areasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        consultaSpiner.setAdapter(areasAdapter);
+                        spinner.setAdapter(areasAdapter);
 
                     } catch (Exception e) {
                         Toast.makeText(seleccionar_paciente_cita.this, "Error al cargar la data", Toast.LENGTH_SHORT).show();
