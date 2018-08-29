@@ -46,10 +46,6 @@
             android:label="Reservar Cita"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".Reservar_Cita"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:label="Reservar Cita">
-        </activity>
     </application>
 
 </manifest>
