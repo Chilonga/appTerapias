@@ -1,5 +1,6 @@
 package aplication.android.wimervm.appterapias;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,8 +10,9 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,26 +20,42 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CalendarView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.Calendar;
 
 public class Pantalla_Inicio extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private DatabaseReference mMedicoDatabase;
+    private DatabaseReference PacienteDatabase;
     private FirebaseUser mCurrentUser;
     private FirebaseAuth mAuth;
     FirebaseUser currentUser;
+    private DatabaseReference citassDatabase;
+    private LinearLayoutManager mLayoutManager;
+    private RecyclerView mUsersList;
+    private TextView txtResultado;
+    String online_user_id;
+    private CalendarView calendarView;
+    final Calendar calendario = Calendar.getInstance();
+    String fecha_calendario;
+    int año=calendario.get(Calendar.YEAR);
+    int mes=calendario.get(Calendar.MONTH);
+    int dias=calendario.get(Calendar.DAY_OF_MONTH);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +70,12 @@ public class Pantalla_Inicio extends AppCompatActivity
         mMedicoDatabase = FirebaseDatabase.getInstance().getReference().child("Medicos").child(current_uid);
         mMedicoDatabase.keepSynced(true);
 
+        citassDatabase = FirebaseDatabase.getInstance().getReference().child("Citas_Reservadas");
+        citassDatabase.keepSynced(true);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.MyToolbar);
         setSupportActionBar(toolbar);
 
-        //Colapsando la barra
         final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar);
         collapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
         collapsingToolbarLayout.setExpandedTitleColor(Color.WHITE);
@@ -83,7 +102,7 @@ public class Pantalla_Inicio extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i=new Intent(getApplicationContext(),seleccionar_paciente_cita.class);
+                Intent i=new Intent(getApplicationContext(),Reservar_Cita.class);
                 startActivity(i);
             }
         });
@@ -96,8 +115,124 @@ public class Pantalla_Inicio extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new LinearLayoutManager(this);
+        mUsersList = (RecyclerView) findViewById(R.id.reciclercitas);
+        mUsersList.setHasFixedSize(true);
+        mUsersList.setLayoutManager(mLayoutManager);
+
+        txtResultado=(TextView)findViewById(R.id.textViewResultados12);
+        calendarView=(CalendarView) findViewById(R.id.calendarView);
+
+        fecha_calendario= String.valueOf(dias+"/"+mes+"/"+año);
+
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @SuppressLint("WrongConstant")
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                fecha_calendario=dayOfMonth+"/"+month+"/"+year;
+                Citas(fecha_calendario);
+
+            }
+        });
     }
 
+    protected void Citas(String fecha) {
+        try {
+
+            final Query query=citassDatabase.orderByChild("fecha_calendario").startAt(fecha).endAt(fecha+"\uf8ff");;
+
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()){
+                        txtResultado.setVisibility(View.INVISIBLE);
+                    }else{
+                        txtResultado.setVisibility(View.VISIBLE);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            FirebaseRecyclerAdapter<citas, Pantalla_Inicio.UsersViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<citas, Pantalla_Inicio.UsersViewHolder>(
+                    citas.class,
+                    R.layout.rcv_citas,
+                    Pantalla_Inicio.UsersViewHolder.class,
+                    query
+            )  {
+                @Override
+                protected void populateViewHolder(final Pantalla_Inicio.UsersViewHolder usersViewHolder, final citas users, final int position) {
+                    usersViewHolder.setHora(users.getFecha());
+                    usersViewHolder.setProcedimiento(users.getProcedimiento());
+
+                    String id=users.getId_paciente();
+
+                    PacienteDatabase = FirebaseDatabase.getInstance().getReference().child("Pacientes").child(id);
+                    PacienteDatabase.keepSynced(true);
+
+                    PacienteDatabase.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String name = dataSnapshot.child("nombre").getValue().toString();
+                            String apellido = dataSnapshot.child("apellido").getValue().toString();
+
+                            usersViewHolder.setNombre(name+ " "+apellido);
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    usersViewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    });
+                }
+            };
+            mUsersList.setAdapter(firebaseRecyclerAdapter);
+        }catch (Exception e){
+            Toast.makeText(Pantalla_Inicio.this, "Error al mostrar!!! ", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    public static class UsersViewHolder extends RecyclerView.ViewHolder {
+
+        View mView;
+
+        public UsersViewHolder(View itemView) {
+            super(itemView);
+
+            mView = itemView;
+        }
+
+
+        public void setHora(String hora){
+            TextView userStatusView = (TextView) mView.findViewById(R.id.txt_fecha);
+            userStatusView.setText(hora);
+        }
+
+        public void setNombre(String nombre){
+            TextView userStatusView = (TextView) mView.findViewById(R.id.txtPaciente);
+            userStatusView.setText(nombre);
+        }
+
+        public void setProcedimiento(String Procedimiento){
+            TextView userStatusView = (TextView) mView.findViewById(R.id.txtProcedimiento);
+            userStatusView.setText(Procedimiento);
+        }
+
+    }
 
     @Override
     public void onStart() {
@@ -107,7 +242,7 @@ public class Pantalla_Inicio extends AppCompatActivity
             if(currentUser==null){
                 sendToStart();
             }else if(currentUser!=null){
-
+                Citas(fecha_calendario);
                 mMedicoDatabase.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -157,32 +292,9 @@ public class Pantalla_Inicio extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.pantalla__inicio, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_sesion) {

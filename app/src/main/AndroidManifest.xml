@@ -38,7 +38,7 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".seleccionar_paciente_cita"
+            android:name=".Reservar_Cita"
             android:label="Reservar Cita"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>

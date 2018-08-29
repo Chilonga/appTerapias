@@ -1,22 +1,16 @@
 package aplication.android.wimervm.appterapias;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,9 +20,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,7 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class seleccionar_paciente_cita extends AppCompatActivity {
+public class Reservar_Cita extends AppCompatActivity {
 
     private DatabaseReference pacientesDatabase;
     private DatabaseReference CitaDatabase;
@@ -63,9 +54,10 @@ public class seleccionar_paciente_cita extends AppCompatActivity {
     private TextView tVNombre,edtFecha;
     private Spinner consultaSpiner,HorarioSpiner;
     final Calendar calendario = Calendar.getInstance();
-    String fecha_calendario,fecha_seleccionada;
+    String fecha_calendario,fecha_seleccionada,fecha_selecc;
     int año=calendario.get(Calendar.YEAR);
     int mes=calendario.get(Calendar.MONTH)+1;
+    int mesC=calendario.get(Calendar.MONTH);
     int dias=calendario.get(Calendar.DAY_OF_MONTH);
     private ProgressDialog mRegProgress;
 
@@ -73,6 +65,10 @@ public class seleccionar_paciente_cita extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seleccionar_paciente_cita);
+
+        fecha_calendario= String.valueOf(dias+"/"+mes+"/"+año);
+
+        fecha_selecc= String.valueOf(dias+"/"+mesC+"/"+año);
 
         mRegProgress = new ProgressDialog(this);
 
@@ -140,7 +136,7 @@ public class seleccionar_paciente_cita extends AppCompatActivity {
                 super.onBackPressed();
             }
         }catch (Exception e){
-            Toast.makeText(seleccionar_paciente_cita.this,"Error!!!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Reservar_Cita.this,"Error!!!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -194,14 +190,14 @@ public class seleccionar_paciente_cita extends AppCompatActivity {
                 }
             });
 
-            FirebaseRecyclerAdapter<Pacientes, seleccionar_paciente_cita.UsersViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Pacientes, seleccionar_paciente_cita.UsersViewHolder>(
+            FirebaseRecyclerAdapter<Pacientes, Reservar_Cita.UsersViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Pacientes, Reservar_Cita.UsersViewHolder>(
                     Pacientes.class,
                     R.layout.pacientes,
-                    seleccionar_paciente_cita.UsersViewHolder.class,
+                    Reservar_Cita.UsersViewHolder.class,
                     query
             )  {
                 @Override
-                protected void populateViewHolder(final seleccionar_paciente_cita.UsersViewHolder usersViewHolder, final Pacientes users, final int position) {
+                protected void populateViewHolder(final Reservar_Cita.UsersViewHolder usersViewHolder, final Pacientes users, final int position) {
                     usersViewHolder.setNombre(users.getNombre()+ " "+users.getApellido());
                     usersViewHolder.setCedula(users.getCedula());
 
@@ -213,7 +209,7 @@ public class seleccionar_paciente_cita extends AppCompatActivity {
                                 imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
                                 Reservar_Cita(users.getNombre()+ " "+users.getApellido(),users.getId());
                             }catch (Exception e){
-                                Toast.makeText(seleccionar_paciente_cita.this, e.toString(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(Reservar_Cita.this, e.toString(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -222,7 +218,7 @@ public class seleccionar_paciente_cita extends AppCompatActivity {
             mUsersList.setAdapter(firebaseRecyclerAdapter);
 
         }catch (Exception e){
-            Toast.makeText(seleccionar_paciente_cita.this, "Error al mostrar!!! ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Reservar_Cita.this, "Error al mostrar!!! ", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -237,9 +233,14 @@ public class seleccionar_paciente_cita extends AppCompatActivity {
             edtFecha=(TextView) dialoglayout.findViewById(R.id.editTFechaCita);
             Button btnReservar=(Button) dialoglayout.findViewById(R.id.buttonReservar);
 
-            tVNombre.setText(nombreyApellido);
+            edtFecha.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    fechaCalendario();
+                }
+            });
 
-            fecha_calendario= String.valueOf(dias+"/"+mes+"/"+año);
+            tVNombre.setText(nombreyApellido);
 
             final String id=idPaciente;
 
@@ -249,16 +250,18 @@ public class seleccionar_paciente_cita extends AppCompatActivity {
                     String hora = HorarioSpiner.getSelectedItem().toString();
                     String procedimiento = consultaSpiner.getSelectedItem().toString();
                     String fecha = edtFecha.getText().toString();
+                    String myFecha=fecha_selecc;
+
                     mRegProgress.setTitle("Reservando cita");
                     mRegProgress.setMessage("Espere mientras se reserva la cita!");
                     mRegProgress.setCanceledOnTouchOutside(false);
                     mRegProgress.setCancelable(false);
                     mRegProgress.show();
-                    Agregar_cita(id,hora,procedimiento,fecha);
+                    Agregar_cita(id,hora,procedimiento,fecha,myFecha);
                 }
             });
 
-            final AlertDialog.Builder builder = new AlertDialog.Builder(seleccionar_paciente_cita.this);
+            final AlertDialog.Builder builder = new AlertDialog.Builder(Reservar_Cita.this);
             builder.setView(dialoglayout);
             builder.setCancelable(false);
             builder.setNeutralButton("Cerrar", new DialogInterface.OnClickListener() {
@@ -274,11 +277,11 @@ public class seleccionar_paciente_cita extends AppCompatActivity {
             spinerDatos("tipo",consultaSpiner,"Tipo_Consulta");
 
         }catch (Exception e){
-            Toast.makeText(seleccionar_paciente_cita.this,e.toString(),Toast.LENGTH_LONG).show();
+            Toast.makeText(Reservar_Cita.this,e.toString(),Toast.LENGTH_LONG).show();
         }
     }
 
-    private void Agregar_cita(String idPaciente, String hora, String procedimiento,String fecha){
+    private void Agregar_cita(String idPaciente, String hora, String procedimiento,String fecha,String fechaCalendar){
         try {
             DatabaseReference clientekey = CitaDatabase.child("Citas_Reservadas").push();
 
@@ -292,6 +295,8 @@ public class seleccionar_paciente_cita extends AppCompatActivity {
             cita_reg.put("hora", hora);
             cita_reg.put("procedimiento", procedimiento);
             cita_reg.put("fecha", fecha);
+            cita_reg.put("fecha_calendario", fechaCalendar);
+
 
             Map cita_agregado = new HashMap();
             cita_agregado.put(pacientes, cita_reg);
@@ -301,19 +306,19 @@ public class seleccionar_paciente_cita extends AppCompatActivity {
                 public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                     if (databaseError != null) {
                         mRegProgress.hide();
-                        Toast.makeText(seleccionar_paciente_cita.this, "Fallo al reservar la cita. Por favor intentelo de nuevo.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Reservar_Cita.this, "Fallo al reservar la cita. Por favor intentelo de nuevo.", Toast.LENGTH_SHORT).show();
                     } else {
                         mRegProgress.dismiss();
-                        Toast.makeText(seleccionar_paciente_cita.this, "Cita reservada", Toast.LENGTH_SHORT).show();
-                        Intent intent = getIntent();
-                        finish();
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(intent);
+                        Toast.makeText(Reservar_Cita.this, "Cita reservada", Toast.LENGTH_SHORT).show();
+                       // Intent intent = getIntent();
+                       // finish();
+                        //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        //startActivity(intent);
                     }
                 }
             });
         }catch (Exception e){
-            Toast.makeText(seleccionar_paciente_cita.this,"Error al guardar!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Reservar_Cita.this,"Error al guardar!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -335,22 +340,22 @@ public class seleccionar_paciente_cita extends AppCompatActivity {
                             areas.add(areaName);
                         }
 
-                        ArrayAdapter<String> areasAdapter = new ArrayAdapter<String>(seleccionar_paciente_cita.this, android.R.layout.simple_spinner_item, areas);
+                        ArrayAdapter<String> areasAdapter = new ArrayAdapter<String>(Reservar_Cita.this, android.R.layout.simple_spinner_item, areas);
                         areasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spinner.setAdapter(areasAdapter);
 
                     } catch (Exception e) {
-                        Toast.makeText(seleccionar_paciente_cita.this, "Error al cargar la data", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Reservar_Cita.this, "Error al cargar la data", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Toast.makeText(seleccionar_paciente_cita.this, "Error de la base de datos", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Reservar_Cita.this, "Error de la base de datos", Toast.LENGTH_SHORT).show();
                 }
             });
         }catch (Exception e){
-            Toast.makeText(seleccionar_paciente_cita.this, "Error de la base de datos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Reservar_Cita.this, "Error de la base de datos", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -368,10 +373,11 @@ public class seleccionar_paciente_cita extends AppCompatActivity {
                 public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                     int monthh=month+1;
                     fecha_seleccionada=dayOfMonth+"/"+monthh+"/"+year;
+                    fecha_selecc=dayOfMonth+"/"+month+"/"+year;
                 }
             });
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(seleccionar_paciente_cita.this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(Reservar_Cita.this);
             builder.setView(dialoglayout);
 
             builder.setView(dialoglayout)
@@ -391,7 +397,7 @@ public class seleccionar_paciente_cita extends AppCompatActivity {
             builder.show();
 
         }catch (Exception e){
-            Toast.makeText(seleccionar_paciente_cita.this,"Error al abrir la fecha",Toast.LENGTH_LONG).show();
+            Toast.makeText(Reservar_Cita.this,"Error al abrir la fecha",Toast.LENGTH_LONG).show();
         }
     }
 
@@ -403,7 +409,7 @@ public class seleccionar_paciente_cita extends AppCompatActivity {
                     Log.i("ActionBar", "Atrás!");
                     finish();
                 }catch (Exception e){
-                    Toast.makeText(seleccionar_paciente_cita.this,"Error al retroceder", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Reservar_Cita.this,"Error al retroceder", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             case R.id.agregar_pacientes: {
