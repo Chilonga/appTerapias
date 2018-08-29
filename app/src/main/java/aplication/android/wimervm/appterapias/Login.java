@@ -61,7 +61,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener  {
             FirebaseUser currentUser = mAuth.getCurrentUser();
 
             if (currentUser != null) {
-                Intent startIntent = new Intent(Login.this, Pantalla_Principal.class);
+                Intent startIntent = new Intent(Login.this, Pantalla_Inicio.class);
                 startActivity(startIntent);
                 finish();
             }
@@ -78,7 +78,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener  {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()) {
                                 mLoginProgress.dismiss();
-                                Intent intent = new Intent(Login.this, Pantalla_Principal.class);
+                                Intent intent = new Intent(Login.this, Pantalla_Inicio.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
                                 finish();

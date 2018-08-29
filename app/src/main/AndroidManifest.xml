@@ -28,10 +28,6 @@
                 android:value=".Login" />
         </activity>
         <activity
-            android:name=".Pantalla_Principal"
-            android:label="Terapias"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".Agregar_Pacientes"
             android:label="Agregar Paciente"
             android:theme="@style/AppTheme.NoActionBar">
@@ -44,6 +40,11 @@
         <activity
             android:name=".seleccionar_paciente_cita"
             android:label="Reservar Cita"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".Pantalla_Inicio"
+            android:label="Terapias"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
