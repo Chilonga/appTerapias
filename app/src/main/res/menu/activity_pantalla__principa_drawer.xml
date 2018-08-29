@@ -4,6 +4,14 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_Agenda"
+            android:icon="@drawable/agenda"
+            android:title="Agenda" />
+        <item
+            android:id="@+id/nav_Pacientes"
+            android:icon="@drawable/nombre"
+            android:title="Pacientes" />
     </group>
 
     <item android:title="Otras Opciones">

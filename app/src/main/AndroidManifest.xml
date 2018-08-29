@@ -3,13 +3,16 @@
     package="aplication.android.wimervm.appterapias">
 
     <application
+        android:name=".AppTerapias"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".Login">
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".Login"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,8 +21,8 @@
         </activity>
         <activity
             android:name=".olvido_pass"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:label="Olvido contraseña">
+            android:label="Olvido contraseña"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Login" />
@@ -28,9 +31,24 @@
             android:name=".Pantalla_Principal"
             android:label="Terapias"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Agregar_Clientes"
-            android:label="Agregar Paciente">
-
+        <activity
+            android:name=".Agregar_Pacientes"
+            android:label="Agregar Paciente"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".Pacientes_lista"
+            android:label="Pacientes"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".seleccionar_paciente_cita"
+            android:label="Reservar Cita"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".Reservar_Cita"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="Reservar Cita">
         </activity>
     </application>
 

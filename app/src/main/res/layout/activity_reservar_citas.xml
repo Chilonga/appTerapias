@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/mytoolbar4"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/holo_blue_light"
+        android:elevation="0dp"
+        android:minHeight="185dp"
+        android:theme="@style/AppTheme"
+        app:contentInsetStart="72dp"
+        app:layout_collapseMode="pin"
+        app:layout_collapseParallaxMultiplier="0.8"
+        app:popupTheme="@style/AppTheme"
+        app:theme="@style/Toolbar"
+        app:titleTextColor="@android:color/background_light">
+    </android.support.v7.widget.Toolbar>
+
+
+    <TextView
+        android:id="@+id/textNombreCita"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/textViewPaciente"
+        android:layout_marginStart="141dp"
+        android:text="Paciente"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textViewPaciente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/editTFechaCita"
+        android:layout_marginTop="76dp"
+        android:drawableLeft="@drawable/nombre"
+        android:drawablePadding="10dp"
+        android:text="Paciente:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/editTFechaCita"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/spinnerConsulta"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:drawableLeft="@drawable/agenda"
+        android:drawablePadding="10dp"
+        android:editable="false"
+        android:ems="10" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/textViewPaciente"
+        android:layout_below="@+id/imageView"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="154dp"
+        android:drawableLeft="@drawable/consulta"
+        android:drawablePadding="10dp"
+        android:text="Tipo de procedimiento:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <Spinner
+        android:id="@+id/spinnerConsulta"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/textView12" />
+
+    <Spinner
+        android:id="@+id/spinnerHorarioCita"
+        android:layout_width="304dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="116dp" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/spinnerHorarioCita"
+        android:layout_marginStart="23dp"
+        app:srcCompat="@drawable/hora" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/editTFechaCita"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:background="@android:color/holo_blue_light"
+        android:text="Reservar Cita"
+        android:textColor="@android:color/background_light" />
+
+</RelativeLayout>

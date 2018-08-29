@@ -36,7 +36,7 @@ public class olvido_pass extends AppCompatActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_olvido_pass);
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.mytoolbar2);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.mytoolbar3);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

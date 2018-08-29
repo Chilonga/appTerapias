@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Agregar_Clientes"
+    tools:context=".Agregar_Pacientes"
     android:orientation="vertical">
 
 
@@ -27,53 +27,61 @@
         app:titleTextColor="@android:color/background_light"></android.support.v7.widget.Toolbar>
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/editTextCedulaPaciente"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_below="@+id/mytoolbar2"
+        android:layout_below="@+id/mytoolbar3"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="30dp"
+        android:drawableLeft="@drawable/cedula"
+        android:drawablePadding="10dp"
         android:ems="10"
         android:hint="Cedula"
         android:inputType="number" />
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/editTextNombrePaciente"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_below="@+id/editText2"
+        android:layout_below="@+id/editTextCedulaPaciente"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:drawableLeft="@drawable/nombre"
+        android:drawablePadding="10dp"
         android:ems="10"
         android:hint="Nombre"
         android:inputType="textPersonName" />
 
     <EditText
-        android:id="@+id/editText4"
+        android:id="@+id/editTextApellidoPaciente"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_below="@+id/editText3"
+        android:layout_below="@+id/editTextNombrePaciente"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:drawableLeft="@drawable/apellido"
+        android:drawablePadding="10dp"
         android:ems="10"
         android:hint="Apellido"
         android:inputType="textPersonName" />
 
     <EditText
-        android:id="@+id/editText5"
+        android:id="@+id/editTextEmailPaciente"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText4"
+        android:layout_below="@+id/editTextApellidoPaciente"
         android:layout_centerInParent="true"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
+        android:drawableLeft="@drawable/email"
+        android:drawablePadding="10dp"
         android:ems="10"
         android:hint="Correo"
         android:inputType="textEmailAddress" />
@@ -83,8 +91,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/editText2"
-        android:layout_below="@+id/editText5"
+        android:layout_alignStart="@+id/editTextCedulaPaciente"
+        android:layout_below="@+id/editTextEmailPaciente"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
@@ -99,7 +107,7 @@
         android:layout_alignLeft="@+id/spinner6"
         android:layout_alignStart="@+id/spinner6"
         android:layout_below="@+id/textView2"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"
@@ -107,19 +115,19 @@
         android:orientation="horizontal">
 
         <RadioButton
-            android:onClick="rbclicked"
             android:id="@+id/radioButtonSi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="40dp"
+            android:onClick="rbclicked"
             android:text="Si" />
 
         <RadioButton
-            android:onClick="rbclicked"
             android:id="@+id/radioButtonNo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:onClick="rbclicked"
             android:text="No" />
 
     </RadioGroup>
@@ -145,20 +153,25 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+                android:drawableLeft="@drawable/seguro"
+                android:drawablePadding="10dp"
                 android:ems="10"
-                android:hint="Numero de Afiliado o RNC"
-                android:inputType="text|number" />
+                android:hint="Numero de seguridad social"
+                android:inputType="number" />
 
             <Spinner
-                android:id="@+id/spinner"
+                android:id="@+id/spinnerPaciente"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:spinnerMode="dialog" />
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/buttonGuardarPaciente"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"

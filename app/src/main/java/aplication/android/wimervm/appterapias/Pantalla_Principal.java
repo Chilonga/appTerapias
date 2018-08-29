@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -25,10 +24,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import javax.security.auth.callback.Callback;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Pantalla_Principal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -58,7 +53,7 @@ public class Pantalla_Principal extends AppCompatActivity
         floatAgregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i=new Intent(getApplicationContext(),Agregar_Clientes.class);
+                Intent i=new Intent(getApplicationContext(),seleccionar_paciente_cita.class);
                 startActivity(i);
             }
         });
@@ -121,25 +116,6 @@ public class Pantalla_Principal extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        getMenuInflater().inflate(R.menu.pantalla__principa, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     private void sendToStart() {
         try {
                 Intent startintent = new Intent(Pantalla_Principal.this, Login.class);
@@ -177,6 +153,9 @@ public class Pantalla_Principal extends AppCompatActivity
             } catch (Exception e){
                 Toast.makeText(Pantalla_Principal.this,"Error al cerrar sesion", Toast.LENGTH_SHORT).show();
             }
+        }else  if (id == R.id.nav_Pacientes) {
+            Intent i=new Intent(getApplicationContext(), Pacientes_lista.class);
+            startActivity(i);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
