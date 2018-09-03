@@ -35,7 +35,7 @@
         android:layout_below="@+id/mytoolbar3"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
         android:drawableLeft="@drawable/cedula"
         android:drawablePadding="10dp"
         android:ems="10"
@@ -85,6 +85,47 @@
         android:ems="10"
         android:hint="Correo"
         android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/edtTelefonoPaciente"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_below="@+id/editTextNombrePaciente"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:drawableLeft="@drawable/telefono"
+        android:drawablePadding="10dp"
+        android:ems="10"
+        android:hint="Telefono"
+        android:inputType="phone" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="20dp">
+
+        <Spinner
+            android:id="@+id/SpinnerSexo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
+            android:drawablePadding="10dp"
+            android:ems="10" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            app:srcCompat="@drawable/sexo"
+            tools:ignore="VectorDrawableCompat" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/b"

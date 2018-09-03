@@ -174,15 +174,6 @@ public class Pacientes_lista extends AppCompatActivity {
                 protected void populateViewHolder(final Pacientes_lista.UsersViewHolder usersViewHolder, final Pacientes users, final int position) {
                     usersViewHolder.setNombre(users.getNombre()+ " "+users.getApellido());
                     usersViewHolder.setCedula(users.getCedula());
-
-                    usersViewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                     //      Intent intent = new Intent(getApplicationContext(), Detalle_Cliente.class);
-                       //     intent.putExtra("id", users.getId());
-                         //   startActivity(intent);
-                        }
-                    });
                 }
             };
             mUsersList.setAdapter(firebaseRecyclerAdapter);

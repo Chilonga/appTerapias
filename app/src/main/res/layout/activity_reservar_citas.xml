@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="40dp">
+    android:layout_marginEnd="60dp">
 
 
     <TextView
@@ -13,7 +13,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignTop="@+id/textViewPaciente"
         android:layout_marginStart="141dp"
-        android:text="Paciente"
+        android:text="Paciente "
         android:textSize="16sp" />
 
     <TextView
@@ -39,24 +39,11 @@
         android:layout_marginBottom="15dp"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:drawableLeft="@drawable/agenda"
         android:drawablePadding="10dp"
         android:ems="10"
         android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/textView12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/textViewPaciente"
-        android:layout_marginTop="117dp"
-        android:drawableLeft="@drawable/consulta"
-        android:drawablePadding="10dp"
-        android:text="Tipo de procedimiento:"
-        android:textSize="16sp"
-        android:textStyle="bold" />
 
     <Spinner
         android:id="@+id/spinnerConsulta"
@@ -65,23 +52,23 @@
         android:layout_alignStart="@+id/textViewPaciente"
         android:layout_below="@+id/textView12"
         android:layout_marginStart="-08dp"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="15dp" />
 
     <Spinner
         android:id="@+id/spinnerHorarioCita"
         android:layout_width="244dp"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/editTFechaCita"
-        android:layout_alignTop="@+id/imageView"
-        android:layout_marginEnd="-20dp" />
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/textNombreCita"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/textViewPaciente"
-        android:layout_marginTop="79dp"
+        android:layout_alignTop="@+id/spinnerHorarioCita"
         app:srcCompat="@drawable/hora" />
 
     <Button
@@ -98,5 +85,18 @@
         android:background="@android:color/holo_blue_light"
         android:text="Reservar Cita"
         android:textColor="@android:color/background_light" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/spinnerHorarioCita"
+        android:layout_marginLeft="20dp"
+        android:drawableLeft="@drawable/consulta"
+        android:drawablePadding="10dp"
+        android:text="Tipo de procedimiento:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>

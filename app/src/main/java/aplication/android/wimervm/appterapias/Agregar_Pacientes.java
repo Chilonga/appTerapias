@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -19,6 +20,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -40,7 +42,7 @@ public class Agregar_Pacientes extends AppCompatActivity implements View.OnClick
     private String radioclickcp="Vacio";
     private EditText edtSeguro,edtCedula,edtNombre,edtApellido,edtCorreo;
     private Button btnGuardar;
-    private Spinner spSeguro;
+    private Spinner spSeguro,spSexo;
     private ProgressDialog mRegProgress;
     private View ViewFocus = null;
     private DatabaseReference PacienteDatabase;
@@ -68,9 +70,18 @@ public class Agregar_Pacientes extends AppCompatActivity implements View.OnClick
         edtCorreo=(EditText)findViewById(R.id.editTextEmailPaciente);
         btnGuardar=(Button)findViewById(R.id.buttonGuardarPaciente);
         spSeguro= (Spinner) findViewById(R.id.spinnerPaciente);
+        spSexo= (Spinner) findViewById(R.id.SpinnerSexo);
 
         SpinnerData = FirebaseDatabase.getInstance().getReference("Seguros");
         SpinnerData.keepSynced(true);
+
+        final List<String> Listsexo = new ArrayList<String>();
+        Listsexo.add("Masculino");
+        Listsexo.add("Femenino");
+
+        ArrayAdapter<String> areasAdapter = new ArrayAdapter<String>(Agregar_Pacientes.this, android.R.layout.simple_spinner_item, Listsexo);
+        areasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spSexo.setAdapter(areasAdapter);
 
         spinerSeguros();
         btnGuardar.setOnClickListener(this);
@@ -148,13 +159,54 @@ public class Agregar_Pacientes extends AppCompatActivity implements View.OnClick
         }
     }
 
+    public void AgregatTutor(){
+        try{
+            LayoutInflater inflater = getLayoutInflater();
+            final View dialoglayout = inflater.inflate(R.layout.datos_tutor, null);
+
+            final AlertDialog.Builder builder = new AlertDialog.Builder(Agregar_Pacientes.this);
+            builder.setTitle("Registrar Tutor");
+            builder.setView(dialoglayout);
+            builder.setCancelable(false);
+            builder.setNeutralButton("Cerrar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            builder.show();
+
+        }catch (Exception e){
+            Toast.makeText(Agregar_Pacientes.this,e.toString(),Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void MenordeEdad(){
+        new AlertDialog.Builder(Agregar_Pacientes.this)
+                .setTitle("Falto la cedula!")
+                .setMessage("El paciente es menor de edad?")
+                .setPositiveButton("si", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        AgregatTutor();
+                    }
+                })
+                .setNegativeButton("no", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        VACIO(edtCedula, ViewFocus);
+                        dialog.cancel();
+                    }
+                }).show();
+    }
+
     @Override
     public void onClick(View v) {
         try {
             if (v == btnGuardar) {
                 try {
                     if (edtCedula.getText().toString().length() == 0) {
-                        VACIO(edtCedula, ViewFocus);
+                        MenordeEdad();
                     } else if (edtNombre.getText().toString().length() == 0) {
                         VACIO(edtNombre, ViewFocus);
                     } else if (edtApellido.getText().toString().length() == 0) {
@@ -198,6 +250,7 @@ public class Agregar_Pacientes extends AppCompatActivity implements View.OnClick
             String correo = edtCorreo.getText().toString().trim();
             String Nss = edtSeguro.getText().toString().trim();
             String seguro = spSeguro.getSelectedItem().toString();
+            String sexo = spSexo.getSelectedItem().toString();
 
             DatabaseReference clientekey = PacienteDatabase.child("Pacientes").push();
 
@@ -211,6 +264,7 @@ public class Agregar_Pacientes extends AppCompatActivity implements View.OnClick
             paciente_reg.put("nombre", nombre);
             paciente_reg.put("apellido", apellido);
             paciente_reg.put("correo", correo);
+            paciente_reg.put("sexo", sexo);
             if (radioclickcp.equals("Si")) {
                 paciente_reg.put("Nss", Nss);
                 paciente_reg.put("seguro", seguro);

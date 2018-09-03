@@ -183,6 +183,15 @@ public class Pantalla_Inicio extends AppCompatActivity
 
                             usersViewHolder.setNombre(name+ " "+apellido);
 
+                            usersViewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent intent = new Intent(getApplicationContext(), Pagos_Citas.class);
+                                    intent.putExtra("id", users.getId());
+                                    startActivity(intent);
+                                }
+                            });
+
                         }
 
                         @Override

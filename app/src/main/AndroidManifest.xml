@@ -47,6 +47,10 @@
             android:label="Terapias"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity android:name=".Pagos_Citas"
+            android:label="Pago Cita"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>
