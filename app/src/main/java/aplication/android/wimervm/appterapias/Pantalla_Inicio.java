@@ -2,15 +2,18 @@ package aplication.android.wimervm.appterapias;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -26,7 +29,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -56,6 +64,7 @@ public class Pantalla_Inicio extends AppCompatActivity
     int año=calendario.get(Calendar.YEAR);
     int mes=calendario.get(Calendar.MONTH);
     int dias=calendario.get(Calendar.DAY_OF_MONTH);
+    private ProgressDialog mCambioProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +81,11 @@ public class Pantalla_Inicio extends AppCompatActivity
 
         citassDatabase = FirebaseDatabase.getInstance().getReference().child("Citas_Reservadas");
         citassDatabase.keepSynced(true);
+
+        mCambioProgress = new ProgressDialog(Pantalla_Inicio.this);
+        mCambioProgress.setTitle("Actualizando cita");
+        mCambioProgress.setMessage("Espere mientras se actualizan los datos !");
+        mCambioProgress.setCancelable(false);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.MyToolbar);
         setSupportActionBar(toolbar);
@@ -169,7 +183,7 @@ public class Pantalla_Inicio extends AppCompatActivity
                 protected void populateViewHolder(final Pantalla_Inicio.UsersViewHolder usersViewHolder, final citas users, final int position) {
                     usersViewHolder.setHora(users.getFecha());
                     usersViewHolder.setProcedimiento(users.getProcedimiento());
-
+                    usersViewHolder.setEstado(users.getEstado());
                     String id=users.getId_paciente();
 
                     PacienteDatabase = FirebaseDatabase.getInstance().getReference().child("Pacientes").child(id);
@@ -192,6 +206,78 @@ public class Pantalla_Inicio extends AppCompatActivity
                                 }
                             });
 
+                            usersViewHolder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+                                @Override
+                                public boolean onLongClick(View view) {
+                                    final String estado= users.getEstado();
+
+                                    if(estado.equals("Activo")){
+                                        new AlertDialog.Builder(Pantalla_Inicio.this)
+                                                .setTitle("Cancelar cita")
+                                                .setCancelable(false)
+                                                .setMessage("Desea cancelar la cita?")
+                                                .setPositiveButton("si", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(final DialogInterface dialog, int which) {
+
+                                                        mCambioProgress.show();
+
+                                                        citassDatabase.child(users.getId()).child("estado").setValue("Cancelado").addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                        if (task.isSuccessful()) {
+                                                                            mCambioProgress.dismiss();
+                                                                            dialog.cancel();
+                                                                        }else{
+                                                                            mCambioProgress.hide();
+                                                                            Toast.makeText(Pantalla_Inicio.this, "Necisita conexion a internet para poder iniciar sesion.", Toast.LENGTH_SHORT).show();
+                                                                        }
+
+                                                            }
+                                                        });
+                                                    }
+                                                })
+                                                .setNegativeButton("no", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(final DialogInterface dialog, int which) {
+                                                        dialog.cancel();
+                                                    }
+                                                }).show();
+                                    }else if(estado.equals("Cancelado")){
+                                            new AlertDialog.Builder(Pantalla_Inicio.this)
+                                                    .setTitle("La cita esta cancelada")
+                                                    .setMessage("Desea activarla?")
+                                                    .setPositiveButton("si", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(final DialogInterface dialog, int which) {
+
+                                                            mCambioProgress.show();
+
+                                                            citassDatabase.child(users.getId()).child("estado").setValue("Activo").addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                    if (task.isSuccessful()) {
+                                                                        mCambioProgress.dismiss();
+                                                                        dialog.cancel();
+                                                                    } else {
+                                                                        mCambioProgress.hide();
+                                                                        Toast.makeText(Pantalla_Inicio.this, "Necisita conexion a internet para poder iniciar sesion.", Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                }
+                                                            });
+                                                            dialog.cancel();
+                                                        }
+                                                    })
+                                                    .setNegativeButton("no", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            dialog.cancel();
+                                                        }
+                                                    }).show();
+                                    }
+                                    return true;
+                                }
+                            });
                         }
 
                         @Override
@@ -212,7 +298,6 @@ public class Pantalla_Inicio extends AppCompatActivity
         }catch (Exception e){
             Toast.makeText(Pantalla_Inicio.this, "Error al mostrar!!! ", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     public static class UsersViewHolder extends RecyclerView.ViewHolder {
@@ -225,7 +310,6 @@ public class Pantalla_Inicio extends AppCompatActivity
             mView = itemView;
         }
 
-
         public void setHora(String hora){
             TextView userStatusView = (TextView) mView.findViewById(R.id.txt_fecha);
             userStatusView.setText(hora);
@@ -236,11 +320,21 @@ public class Pantalla_Inicio extends AppCompatActivity
             userStatusView.setText(nombre);
         }
 
+        public void setEstado(String estado){
+            TextView userStatusView = (TextView) mView.findViewById(R.id.textViewEstado);
+            if(estado.equals("Cancelado")){
+                userStatusView.setVisibility(View.VISIBLE);
+                userStatusView.setText(estado);
+            }else if (estado.equals("Activo")){
+                userStatusView.setVisibility(View.GONE);
+            }
+        }
+
+
         public void setProcedimiento(String Procedimiento){
             TextView userStatusView = (TextView) mView.findViewById(R.id.txtProcedimiento);
             userStatusView.setText(Procedimiento);
         }
-
     }
 
     @Override

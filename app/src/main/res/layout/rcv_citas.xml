@@ -1,8 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cardCitas"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="1dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textViewEstado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/holo_red_dark"
+            android:padding="10dp"
+            android:text="Estado"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_light"
+            android:visibility="gone" />
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -35,9 +56,9 @@
                     android:id="@+id/txtPaciente"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="95dp"
                     android:layout_marginTop="5dp"
                     android:layout_weight="1"
-                    android:hint="Doctor"
                     android:paddingTop="7dp"
                     android:text="Pacientes"
                     android:textSize="14sp" />

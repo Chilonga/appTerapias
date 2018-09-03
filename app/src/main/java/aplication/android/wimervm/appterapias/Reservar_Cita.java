@@ -296,7 +296,7 @@ public class Reservar_Cita extends AppCompatActivity {
             cita_reg.put("procedimiento", procedimiento);
             cita_reg.put("fecha", fecha);
             cita_reg.put("fecha_calendario", fechaCalendar);
-
+            cita_reg.put("estado", "Activo");
 
             Map cita_agregado = new HashMap();
             cita_agregado.put(pacientes, cita_reg);
