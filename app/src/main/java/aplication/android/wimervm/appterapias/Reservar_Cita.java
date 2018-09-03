@@ -1,4 +1,4 @@
-package aplication.android.wimervm.appterapias;
+    package aplication.android.wimervm.appterapias;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -34,6 +34,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -60,6 +61,7 @@ public class Reservar_Cita extends AppCompatActivity {
     int mesC=calendario.get(Calendar.MONTH);
     int dias=calendario.get(Calendar.DAY_OF_MONTH);
     private ProgressDialog mRegProgress;
+    private String fecha;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +83,9 @@ public class Reservar_Cita extends AppCompatActivity {
 
         pacientesDatabase = FirebaseDatabase.getInstance().getReference().child("Pacientes");
         pacientesDatabase.keepSynced(true);
+
+        Intent i = this.getIntent();
+        fecha = i.getExtras().getString("fecha");
 
         CitaDatabase = FirebaseDatabase.getInstance().getReference();
         CitaDatabase.keepSynced(true);
@@ -272,7 +277,7 @@ public class Reservar_Cita extends AppCompatActivity {
             });
             builder.show();
 
-            edtFecha.setText(fecha_calendario);
+            edtFecha.setText(fecha);
             spinerDatos("hora",HorarioSpiner,"Horario");
             spinerDatos("tipo",consultaSpiner,"Tipo_Consulta");
 
@@ -376,6 +381,8 @@ public class Reservar_Cita extends AppCompatActivity {
                     fecha_selecc=dayOfMonth+"/"+month+"/"+year;
                 }
             });
+
+            calendarView.setDate(new SimpleDateFormat("dd/MM/yyyy").parse(edtFecha.getText().toString()).getTime(), true, true);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(Reservar_Cita.this);
             builder.setView(dialoglayout);

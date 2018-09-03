@@ -65,6 +65,7 @@ public class Pantalla_Inicio extends AppCompatActivity
     int mes=calendario.get(Calendar.MONTH);
     int dias=calendario.get(Calendar.DAY_OF_MONTH);
     private ProgressDialog mCambioProgress;
+    String fecha_seleccionada;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +118,7 @@ public class Pantalla_Inicio extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent i=new Intent(getApplicationContext(),Reservar_Cita.class);
+                i.putExtra("fecha",fecha_seleccionada);
                 startActivity(i);
             }
         });
@@ -146,6 +148,8 @@ public class Pantalla_Inicio extends AppCompatActivity
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 fecha_calendario=dayOfMonth+"/"+month+"/"+year;
+                int mess=month+1;
+                fecha_seleccionada=dayOfMonth+"/"+mess+"/"+año;
                 Citas(fecha_calendario);
 
             }
