@@ -1,225 +1,232 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Agregar_Pacientes"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:scrollbarStyle="outsideOverlay"
+    tools:context=".Agregar_Pacientes">
 
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/mytoolbar2"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:background="@android:color/holo_blue_light"
-        android:elevation="0dp"
-        android:minHeight="185dp"
-        android:theme="@style/AppTheme"
-        app:contentInsetStart="72dp"
-        app:layout_collapseMode="pin"
-        app:layout_collapseParallaxMultiplier="0.8"
-        app:popupTheme="@style/AppTheme"
-        app:theme="@style/Toolbar"
-        app:titleTextColor="@android:color/background_light"></android.support.v7.widget.Toolbar>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/editTextCedulaPaciente"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_below="@+id/mytoolbar3"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="15dp"
-        android:drawableLeft="@drawable/cedula"
-        android:drawablePadding="10dp"
-        android:ems="10"
-        android:hint="Cedula"
-        android:inputType="number" />
-
-    <EditText
-        android:id="@+id/editTextNombrePaciente"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_below="@+id/editTextCedulaPaciente"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:drawableLeft="@drawable/nombre"
-        android:drawablePadding="10dp"
-        android:ems="10"
-        android:hint="Nombre"
-        android:inputType="textPersonName" />
-
-    <EditText
-        android:id="@+id/editTextApellidoPaciente"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_below="@+id/editTextNombrePaciente"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:drawableLeft="@drawable/apellido"
-        android:drawablePadding="10dp"
-        android:ems="10"
-        android:hint="Apellido"
-        android:inputType="textPersonName" />
-
-    <EditText
-        android:id="@+id/editTextEmailPaciente"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editTextApellidoPaciente"
-        android:layout_centerInParent="true"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="20dp"
-        android:drawableLeft="@drawable/email"
-        android:drawablePadding="10dp"
-        android:ems="10"
-        android:hint="Correo"
-        android:inputType="textEmailAddress" />
-
-    <EditText
-        android:id="@+id/edtTelefonoPaciente"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_below="@+id/editTextNombrePaciente"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:drawableLeft="@drawable/telefono"
-        android:drawablePadding="10dp"
-        android:ems="10"
-        android:hint="Telefono"
-        android:inputType="phone" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="20dp">
-
-        <Spinner
-            android:id="@+id/SpinnerSexo"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/mytoolbar2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="35dp"
-            android:drawablePadding="10dp"
-            android:ems="10" />
+            android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@android:color/holo_blue_light"
+            android:elevation="0dp"
+            android:minHeight="185dp"
+            android:theme="@style/AppTheme"
+            app:contentInsetStart="72dp"
+            app:layout_collapseMode="pin"
+            app:layout_collapseParallaxMultiplier="0.8"
+            app:popupTheme="@style/AppTheme"
+            app:theme="@style/Toolbar"
+            app:titleTextColor="@android:color/background_light"></android.support.v7.widget.Toolbar>
 
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/editTextCedulaPaciente"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            app:srcCompat="@drawable/sexo"
-            tools:ignore="VectorDrawableCompat" />
-    </RelativeLayout>
+            android:layout_below="@+id/mytoolbar3"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp"
+            android:drawableLeft="@drawable/cedula"
+            android:drawablePadding="10dp"
+            android:ems="10"
+            android:hint="Cedula"
+            android:inputType="number" />
 
-    <TextView
-        android:id="@+id/b"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/editTextCedulaPaciente"
-        android:layout_below="@+id/editTextEmailPaciente"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        android:text="El paciente tiene seguro medico?"
-        android:textAlignment="center"
-        android:textSize="18sp" />
-
-    <RadioGroup
-        android:id="@+id/radiogroupCP"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/spinner6"
-        android:layout_alignStart="@+id/spinner6"
-        android:layout_below="@+id/textView2"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/radioButtonSi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="40dp"
-            android:onClick="rbclicked"
-            android:text="Si" />
-
-        <RadioButton
-            android:id="@+id/radioButtonNo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:onClick="rbclicked"
-            android:text="No" />
-
-    </RadioGroup>
-
-    <android.support.v7.widget.CardView
-        android:id="@+id/cardviewSeguro"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:visibility="gone">
-
-        <LinearLayout
+        <EditText
+            android:id="@+id/editTextNombrePaciente"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="5dp"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_below="@+id/editTextCedulaPaciente"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:drawableLeft="@drawable/nombre"
+            android:drawablePadding="10dp"
+            android:ems="10"
+            android:hint="Nombre"
+            android:inputType="textPersonName" />
 
-            <EditText
-                android:id="@+id/editTextSeguro"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:drawableLeft="@drawable/seguro"
-                android:drawablePadding="10dp"
-                android:ems="10"
-                android:hint="Numero de seguridad social"
-                android:inputType="number" />
+        <EditText
+            android:id="@+id/editTextApellidoPaciente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_below="@+id/editTextNombrePaciente"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:drawableLeft="@drawable/apellido"
+            android:drawablePadding="10dp"
+            android:ems="10"
+            android:hint="Apellido"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/editTextEmailPaciente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editTextApellidoPaciente"
+            android:layout_centerInParent="true"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:drawableLeft="@drawable/email"
+            android:drawablePadding="10dp"
+            android:ems="10"
+            android:hint="Correo"
+            android:inputType="textEmailAddress" />
+
+        <EditText
+            android:id="@+id/edtTelefonoPaciente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_below="@+id/editTextNombrePaciente"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:drawableLeft="@drawable/telefono"
+            android:drawablePadding="10dp"
+            android:ems="10"
+            android:hint="Telefono"
+            android:inputType="phone" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="20dp">
 
             <Spinner
-                android:id="@+id/spinnerPaciente"
+                android:id="@+id/SpinnerSexo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="10dp"
-                android:spinnerMode="dialog" />
-        </LinearLayout>
+                android:layout_marginStart="35dp"
+                android:drawablePadding="10dp"
+                android:ems="10" />
 
-    </android.support.v7.widget.CardView>
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                app:srcCompat="@drawable/sexo"
+                tools:ignore="VectorDrawableCompat" />
+        </RelativeLayout>
 
-    <Button
-        android:id="@+id/buttonGuardarPaciente"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:background="@android:color/holo_blue_light"
-        android:text="Guardar"
-        android:textColor="@android:color/background_light" />
+        <TextView
+            android:id="@+id/b"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/editTextCedulaPaciente"
+            android:layout_below="@+id/editTextEmailPaciente"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:text="El paciente tiene seguro medico?"
+            android:textAlignment="center"
+            android:textSize="18sp" />
 
-</LinearLayout>
+        <RadioGroup
+            android:id="@+id/radiogroupCP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/spinner6"
+            android:layout_alignStart="@+id/spinner6"
+            android:layout_below="@+id/textView2"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radioButtonSi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="40dp"
+                android:onClick="rbclicked"
+                android:text="Si" />
+
+            <RadioButton
+                android:id="@+id/radioButtonNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:onClick="rbclicked"
+                android:text="No" />
+
+        </RadioGroup>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardviewSeguro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/editTextSeguro"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:drawableLeft="@drawable/seguro"
+                    android:drawablePadding="10dp"
+                    android:ems="10"
+                    android:hint="Numero de seguridad social"
+                    android:inputType="number" />
+
+                <Spinner
+                    android:id="@+id/spinnerPaciente"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:spinnerMode="dialog" />
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <Button
+            android:id="@+id/buttonGuardarPaciente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@android:color/holo_blue_light"
+            android:text="Guardar"
+            android:textColor="@android:color/background_light" />
+
+    </LinearLayout>
+</ScrollView>

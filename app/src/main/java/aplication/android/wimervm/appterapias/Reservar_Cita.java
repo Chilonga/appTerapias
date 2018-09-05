@@ -20,6 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +45,7 @@ import java.util.Map;
 public class Reservar_Cita extends AppCompatActivity {
 
     private DatabaseReference pacientesDatabase;
+    private DatabaseReference TutorDatabase;
     private DatabaseReference CitaDatabase;
     FirebaseAuth mAuth;
     private LinearLayoutManager mLayoutManager;
@@ -83,6 +85,9 @@ public class Reservar_Cita extends AppCompatActivity {
 
         pacientesDatabase = FirebaseDatabase.getInstance().getReference().child("Pacientes");
         pacientesDatabase.keepSynced(true);
+
+        TutorDatabase = FirebaseDatabase.getInstance().getReference().child("Tutor");
+        TutorDatabase.keepSynced(true);
 
         Intent i = this.getIntent();
         fecha = i.getExtras().getString("fecha");
@@ -172,7 +177,7 @@ public class Reservar_Cita extends AppCompatActivity {
         try {
             final Query query;
             if(texto.equals("lista")){
-               query=pacientesDatabase;
+               query=pacientesDatabase.orderByChild("nombre");
 
             }else{
                 query=pacientesDatabase.orderByChild("nombre").startAt(texto).endAt(texto+"\uf8ff");
@@ -204,7 +209,25 @@ public class Reservar_Cita extends AppCompatActivity {
                 @Override
                 protected void populateViewHolder(final Reservar_Cita.UsersViewHolder usersViewHolder, final Pacientes users, final int position) {
                     usersViewHolder.setNombre(users.getNombre()+ " "+users.getApellido());
-                    usersViewHolder.setCedula(users.getCedula());
+
+                    if(users.getCedula().equals("No tiene")){
+                        TutorDatabase.child(users.getId_tutor()).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                String name = dataSnapshot.child("nombre").getValue().toString();
+                                String apellido = dataSnapshot.child("apellido").getValue().toString();
+                                String cedula = dataSnapshot.child("cedula").getValue().toString();
+                                usersViewHolder.setTutor(name+" "+apellido,cedula);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                    }else{
+                        usersViewHolder.setCedula(users.getCedula());
+                    }
 
                     usersViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -439,8 +462,19 @@ public class Reservar_Cita extends AppCompatActivity {
             mView = itemView;
         }
 
-        public void setCedula(String cedula){
+        public void setTutor(String tutor,String cedula){
             TextView userStatusView = (TextView) mView.findViewById(R.id.txtCedulaPacientes);
+            TextView userStatuView = (TextView) mView.findViewById(R.id.txtCedula);
+           // TextView tutorStatuView = (TextView) mView.findViewById(R.id.txtCedulaTutor);
+            userStatuView.setText("Tutor:");
+            userStatusView.setText(tutor);
+          //  tutorStatuView.setText(cedula);
+        }
+
+        public void setCedula(String cedula){
+            //LinearLayout Linear = (LinearLayout) mView.findViewById(R.id.linear);
+            TextView userStatusView = (TextView) mView.findViewById(R.id.txtCedulaPacientes);
+           // Linear.setVisibility(View.GONE);
             userStatusView.setText(cedula);
         }
 

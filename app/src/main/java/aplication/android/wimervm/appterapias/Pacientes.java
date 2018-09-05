@@ -2,13 +2,12 @@ package aplication.android.wimervm.appterapias;
 
 public class Pacientes {
 
-    String nombre,apellido,id,cedula,correo,seguro,nss;
+    String nombre, apellido, id, cedula, correo, seguro, nss, id_tutor;
 
     public Pacientes() {
-
     }
 
-    public Pacientes(String nombre, String apellido, String id, String cedula, String correo, String seguro, String nss) {
+    public Pacientes(String nombre, String apellido, String id, String cedula, String correo, String seguro, String nss, String id_tutor) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.id = id;
@@ -16,6 +15,7 @@ public class Pacientes {
         this.correo = correo;
         this.seguro = seguro;
         this.nss = nss;
+        this.id_tutor = id_tutor;
     }
 
     public String getNombre() {
@@ -72,5 +72,13 @@ public class Pacientes {
 
     public void setNss(String nss) {
         this.nss = nss;
+    }
+
+    public String getId_tutor() {
+        return id_tutor;
+    }
+
+    public void setId_tutor(String id_tutor) {
+        this.id_tutor = id_tutor;
     }
 }

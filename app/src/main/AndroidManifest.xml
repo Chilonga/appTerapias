@@ -30,7 +30,8 @@
         <activity
             android:name=".Agregar_Pacientes"
             android:label="Agregar Paciente"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
         <activity
             android:name=".Pacientes_lista"
