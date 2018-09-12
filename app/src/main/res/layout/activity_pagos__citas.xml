@@ -23,4 +23,131 @@
         app:popupTheme="@style/AppTheme"
         app:theme="@style/Toolbar"
         app:titleTextColor="@android:color/background_light"></android.support.v7.widget.Toolbar>
+
+    <Spinner
+        android:id="@+id/spinnerTipoPago"
+        android:layout_width="242dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="176dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/textView5"
+        android:layout_marginTop="168dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="Tipo de pago:"
+        android:textAlignment="center"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/editText2"
+        android:layout_marginTop="82dp"
+        android:text="Paciente:"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvNombrePago"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/textView5"
+        android:layout_marginStart="102dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/textView5"
+        android:layout_marginTop="110dp"
+        android:text="Seguro:"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvSeguroPago"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvNombrePago"
+        android:layout_alignTop="@+id/textView8"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/textView5"
+        android:layout_marginTop="142dp"
+        android:text="Nss:"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvNssPago"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvNombrePago"
+        android:layout_alignTop="@+id/textView10"
+        android:text="TextView" />
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="210dp"
+        android:ems="10"
+        android:hint="Monto de la cita"
+        android:inputType="number"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/editText5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/editText2"
+        android:layout_below="@+id/editText2"
+        android:layout_marginEnd="20dp"
+        android:ems="10"
+        android:hint="Monto que cubre el seguro"
+        android:inputType="number"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/editText6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/editText2"
+        android:layout_below="@+id/editText5"
+        android:layout_marginEnd="20dp"
+        android:ems="10"
+        android:hint="Monto pagado en efectivo"
+        android:inputType="number"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/editText2"
+        android:layout_below="@+id/editText6"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/holo_blue_light"
+        android:text="Realizar Pago"
+        android:textAllCaps="false"
+        android:textColor="@android:color/background_light" />
+
 </RelativeLayout>

@@ -204,7 +204,8 @@ public class Pantalla_Inicio extends AppCompatActivity
                                 @Override
                                 public void onClick(View view) {
                                     Intent intent = new Intent(getApplicationContext(), Pagos_Citas.class);
-                                    intent.putExtra("id", users.getId());
+                                    intent.putExtra("id_CITA", users.getId());
+                                    intent.putExtra("id", users.getId_paciente());
                                     startActivity(intent);
                                 }
                             });
