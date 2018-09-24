@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".detallePago">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/mytoolbar6"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/holo_blue_light"
+        android:elevation="0dp"
+        android:minHeight="185dp"
+        android:theme="@style/AppTheme"
+        app:contentInsetStart="72dp"
+        app:layout_collapseMode="pin"
+        app:layout_collapseParallaxMultiplier="0.8"
+        app:popupTheme="@style/AppTheme"
+        app:theme="@style/Toolbar"
+        app:titleTextColor="@android:color/background_light"></android.support.v7.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="90dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="90dp"
+        android:drawableLeft="@drawable/nombre"
+        android:drawablePadding="10dp"
+        android:text="Paciente:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvNombrep"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textView"
+        android:layout_marginEnd="10dp"
+        android:layout_toEndOf="@+id/textView"
+        android:text="TextView"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView"
+        android:layout_alignTop="@+id/tvSegurop "
+        android:drawableLeft="@drawable/seguro"
+        android:drawablePadding="10dp"
+        android:text="Seguro:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvSegurop "
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvNombrep"
+        android:layout_alignTop="@+id/tvNombrep"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="35dp"
+        android:text="TextView"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvNssp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvNombrep"
+        android:layout_below="@+id/tvSegurop "
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="10dp"
+        android:text="TextView"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView"
+        android:layout_alignTop="@+id/tvNssp"
+        android:drawableLeft="@drawable/nss"
+        android:drawablePadding="10dp"
+        android:text="Nss:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvProcedP"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvNombrep"
+        android:layout_below="@+id/tvNssp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="10dp"
+        android:text="TextView"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView23"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView"
+        android:layout_alignTop="@+id/tvProcedP"
+        android:drawableLeft="@drawable/consulta"
+        android:drawablePadding="10dp"
+        android:text="Procedimiento:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvpPago"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvNombrep"
+        android:layout_below="@+id/tvProcedP"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="10dp"
+        android:text="TextView"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView25"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView"
+        android:layout_alignTop="@+id/tvpPago"
+        android:drawableLeft="@drawable/ic_monetization_on_black_24dp"
+        android:drawablePadding="10dp"
+        android:text="Tipo de pago:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvMcita"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvNombrep"
+        android:layout_below="@+id/tvpPago"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="10dp"
+        android:text="TextView"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView27"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView"
+        android:layout_alignTop="@+id/tvMcita"
+        android:drawableLeft="@drawable/ic_attach_money_black_24dp"
+        android:drawablePadding="10dp"
+        android:text="Monto de la cita:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvFcita"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvNombrep"
+        android:layout_below="@+id/tvMcita"
+        android:layout_marginBottom="25dp"
+        android:layout_marginEnd="10dp"
+        android:text="TextView"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView29"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView"
+        android:layout_alignTop="@+id/tvFcita"
+        android:drawableLeft="@drawable/ic_attach_money_black_24dp"
+        android:drawablePadding="10dp"
+        android:text="Monto en efectivo:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvMseguro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvNombrep"
+        android:layout_alignTop="@+id/textView39"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="10dp"
+        android:text="TextView"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView39"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView"
+        android:layout_below="@+id/tvFcita"
+        android:layout_marginTop="-10dp"
+        android:drawableLeft="@drawable/ic_attach_money_black_24dp"
+        android:drawablePadding="10dp"
+        android:text="Monto Seguro:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvDveu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvNombrep"
+        android:layout_below="@+id/tvMseguro"
+        android:layout_marginBottom="25dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="-2dp"
+        android:text="Gratis"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView41"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView"
+        android:layout_alignTop="@+id/tvDveu"
+        android:drawableLeft="@drawable/ic_attach_money_black_24dp"
+        android:drawablePadding="10dp"
+        android:text="Monto devuelto:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvpfecha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvNombrep"
+        android:layout_below="@+id/tvDveu"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="-10dp"
+        android:text="TextView"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView43"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView"
+        android:layout_alignTop="@+id/tvpfecha"
+        android:drawableLeft="@drawable/agenda"
+        android:drawablePadding="10dp"
+        android:text="Fecha:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvPhora"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvNombrep"
+        android:layout_below="@+id/tvpfecha"
+        android:layout_marginLeft="-80dp"
+        android:text="TextView"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView45"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView"
+        android:layout_alignTop="@+id/tvPhora"
+        android:drawableLeft="@drawable/hora"
+        android:drawablePadding="10dp"
+        android:text="Hora:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>

@@ -2,17 +2,18 @@ package aplication.android.wimervm.appterapias;
 
 public class citas {
 
-    String fecha,fechacalendario,hora,id,id_paciente,procedimiento,estado;
+    String fecha, fechacalendario, hora, id, id_paciente, id_pago, procedimiento, estado;
 
     public citas() {
     }
 
-    public citas(String fecha, String fechacalendario, String hora, String id, String id_paciente, String procedimiento, String estado) {
+    public citas(String fecha, String fechacalendario, String hora, String id, String id_paciente, String id_pago, String procedimiento, String estado) {
         this.fecha = fecha;
         this.fechacalendario = fechacalendario;
         this.hora = hora;
         this.id = id;
         this.id_paciente = id_paciente;
+        this.id_pago = id_pago;
         this.procedimiento = procedimiento;
         this.estado = estado;
     }
@@ -55,6 +56,14 @@ public class citas {
 
     public void setId_paciente(String id_paciente) {
         this.id_paciente = id_paciente;
+    }
+
+    public String getId_pago() {
+        return id_pago;
+    }
+
+    public void setId_pago(String id_pago) {
+        this.id_pago = id_pago;
     }
 
     public String getProcedimiento() {

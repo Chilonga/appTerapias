@@ -319,6 +319,7 @@ public class Reservar_Cita extends AppCompatActivity {
 
             Map cita_reg = new HashMap();
             cita_reg.put("id", clientepush.toString());
+            cita_reg.put("id_pago", "Ninguno");
             cita_reg.put("id_paciente", idPaciente);
             cita_reg.put("hora", hora);
             cita_reg.put("procedimiento", procedimiento);

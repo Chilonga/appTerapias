@@ -48,9 +48,15 @@
             android:label="Terapias"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".Pagos_Citas"
+        <activity
+            android:name=".Pagos_Citas"
             android:label="Pago Cita"
+            android:windowSoftInputMode="stateAlwaysHidden"
             android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".detallePago"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="Detalle del pago">
         </activity>
     </application>
 

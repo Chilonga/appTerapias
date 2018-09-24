@@ -62,7 +62,7 @@ public class Pantalla_Inicio extends AppCompatActivity
     final Calendar calendario = Calendar.getInstance();
     String fecha_calendario;
     int año=calendario.get(Calendar.YEAR);
-    int mes=calendario.get(Calendar.MONTH);
+    int mes=calendario.get(Calendar.MONTH)+1;
     int dias=calendario.get(Calendar.DAY_OF_MONTH);
     private ProgressDialog mCambioProgress;
     String fecha_seleccionada=dias+"/"+mes+"/"+año;
@@ -203,10 +203,22 @@ public class Pantalla_Inicio extends AppCompatActivity
                             usersViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    Intent intent = new Intent(getApplicationContext(), Pagos_Citas.class);
-                                    intent.putExtra("id_CITA", users.getId());
-                                    intent.putExtra("id", users.getId_paciente());
-                                    startActivity(intent);
+                                    final String estado= users.getEstado();
+
+                                    if(estado.equals("Pagado")){
+                                        Intent intent = new Intent(getApplicationContext(), detallePago.class);
+                                        intent.putExtra("id_Pago", users.getId_pago());
+                                        intent.putExtra("id_CITA", users.getId());
+                                        intent.putExtra("id", users.getId_paciente());
+                                        startActivity(intent);
+                                    }else  if(estado.equals("Cancelado")){
+                                        Toast.makeText(getApplicationContext(),"La cita ah sido cancelada",Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        Intent intent = new Intent(getApplicationContext(), Pagos_Citas.class);
+                                        intent.putExtra("id_CITA", users.getId());
+                                        intent.putExtra("id", users.getId_paciente());
+                                        startActivity(intent);
+                                    }
                                 }
                             });
 
@@ -304,43 +316,6 @@ public class Pantalla_Inicio extends AppCompatActivity
         }
     }
 
-    public static class UsersViewHolder extends RecyclerView.ViewHolder {
-
-        View mView;
-
-        public UsersViewHolder(View itemView) {
-            super(itemView);
-
-            mView = itemView;
-        }
-
-        public void setHora(String hora){
-            TextView userStatusView = (TextView) mView.findViewById(R.id.txt_fecha);
-            userStatusView.setText(hora);
-        }
-
-        public void setNombre(String nombre){
-            TextView userStatusView = (TextView) mView.findViewById(R.id.txtPaciente);
-            userStatusView.setText(nombre);
-        }
-
-        public void setEstado(String estado){
-            TextView userStatusView = (TextView) mView.findViewById(R.id.textViewEstado);
-            if(estado.equals("Cancelado")){
-                userStatusView.setVisibility(View.VISIBLE);
-                userStatusView.setText(estado);
-            }else if (estado.equals("Activo")){
-                userStatusView.setVisibility(View.GONE);
-            }
-        }
-
-
-        public void setProcedimiento(String Procedimiento){
-            TextView userStatusView = (TextView) mView.findViewById(R.id.txtProcedimiento);
-            userStatusView.setText(Procedimiento);
-        }
-    }
-
     @Override
     public void onStart() {
         try{
@@ -433,5 +408,46 @@ public class Pantalla_Inicio extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+    public static class UsersViewHolder extends RecyclerView.ViewHolder {
+
+        View mView;
+
+        public UsersViewHolder(View itemView) {
+            super(itemView);
+
+            mView = itemView;
+        }
+
+        public void setHora(String hora){
+            TextView userStatusView = (TextView) mView.findViewById(R.id.txt_fecha);
+            userStatusView.setText(hora);
+        }
+
+        public void setNombre(String nombre){
+            TextView userStatusView = (TextView) mView.findViewById(R.id.txtPaciente);
+            userStatusView.setText(nombre);
+        }
+
+        public void setEstado(String estado){
+            TextView userStatusView = (TextView) mView.findViewById(R.id.textViewEstado);
+            if(estado.equals("Cancelado")){
+                userStatusView.setVisibility(View.VISIBLE);
+                userStatusView.setText(estado);
+            }else if (estado.equals("Activo")){
+                userStatusView.setVisibility(View.GONE);
+            }else if(estado.equals("Pagado")){
+                userStatusView.setVisibility(View.VISIBLE);
+                userStatusView.setBackgroundResource(R.color.colorPago);
+                userStatusView.setText(estado);
+            }
+        }
+
+        public void setProcedimiento(String Procedimiento){
+            TextView userStatusView = (TextView) mView.findViewById(R.id.txtProcedimiento);
+            userStatusView.setText(Procedimiento);
+        }
     }
 }
