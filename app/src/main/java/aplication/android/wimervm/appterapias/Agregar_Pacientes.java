@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -36,6 +38,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static aplication.android.wimervm.appterapias.Reservar_Cita.compruebaConexion;
+
 public class Agregar_Pacientes extends AppCompatActivity implements View.OnClickListener {
 
     private DatabaseReference SpinnerData;
@@ -49,6 +53,8 @@ public class Agregar_Pacientes extends AppCompatActivity implements View.OnClick
     private View ViewFocus = null;
     private DatabaseReference PacienteDatabase;
     private String TutorId="No tiene";
+    private CardView cvSeguro;
+    private String registrado_tutor="No",id_tutor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +72,7 @@ public class Agregar_Pacientes extends AppCompatActivity implements View.OnClick
         PacienteDatabase=FirebaseDatabase.getInstance().getReference();
         PacienteDatabase.keepSynced(true);
 
+        cvSeguro= (CardView) findViewById(R.id.cardviewSeguro);
         edtSeguro=(EditText)findViewById(R.id.editTextSeguro);
         edtCedula=(EditText)findViewById(R.id.editTextCedulaPaciente);
         edtNombre=(EditText)findViewById(R.id.editTextNombrePaciente);
@@ -93,8 +100,6 @@ public class Agregar_Pacientes extends AppCompatActivity implements View.OnClick
 
     public void rbclicked(View v){
         try {
-            CardView cvSeguro = (CardView) findViewById(R.id.cardviewSeguro);
-
             int radiobutton_id = radioCP.getCheckedRadioButtonId();
 
             radioButtonCP = (RadioButton) findViewById(radiobutton_id);
@@ -284,6 +289,21 @@ public class Agregar_Pacientes extends AppCompatActivity implements View.OnClick
                                         Map TUTOR_agregado = new HashMap();
                                         TUTOR_agregado.put(tutor, tutor_reg);
 
+                                        String s= String.valueOf(compruebaConexion(getApplicationContext()));
+                                        if(s.equals("false")) {
+                                            mRegProgress.dismiss();
+                                            Toast.makeText(Agregar_Pacientes.this, "tutor registrado sin conexion", Toast.LENGTH_SHORT).show();
+                                            tvcedulaTutor.setText("");
+                                            tvNombreTutor.setText("");
+                                            tvApellidoTutor.setText("");
+                                            tvTelefonoTutor.setText("");
+                                            tvDireccionTutor.setText("");
+                                            tvCorreoTutor.setText("");
+                                            spinnerSexoTutor.setSelection(0);
+                                            registrado_tutor="Si";
+                                            id_tutor=cedula;
+                                        }
+
                                         PacienteDatabase.updateChildren(TUTOR_agregado, new DatabaseReference.CompletionListener() {
                                             @Override
                                             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
@@ -334,18 +354,32 @@ public class Agregar_Pacientes extends AppCompatActivity implements View.OnClick
             builder.setNeutralButton("Cerrar", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if(detalla[0].equals("No tiene")){
-                        edtCedula.setVisibility(View.GONE);
-                        edtCedula.setText("No tiene");
-                        TutorId=idTutor[0].toString();
-                        dialog.cancel();
+                    String s= String.valueOf(compruebaConexion(getApplicationContext()));
+                    if(s.equals("false")) {
+                        if (registrado_tutor.equals("Si") ) {
+                            edtCedula.setVisibility(View.GONE);
+                            edtCedula.setText("No tiene");
+                            TutorId = id_tutor;
+                            dialog.cancel();
+                        } else if (registrado_tutor.equals("No") ) {
+                            edtCedula.setVisibility(View.VISIBLE);
+                            edtCedula.setText("");
+                            edtCedula.requestFocus();
+                            dialog.cancel();
+                        }
                     }else{
-                        edtCedula.setVisibility(View.VISIBLE);
-                        edtCedula.setText("");
-                        edtCedula.requestFocus();
-                        dialog.cancel();
+                        if (detalla[0].equals("No tiene")) {
+                            edtCedula.setVisibility(View.GONE);
+                            edtCedula.setText("No tiene");
+                            TutorId = idTutor[0].toString();
+                            dialog.cancel();
+                        } else {
+                            edtCedula.setVisibility(View.VISIBLE);
+                            edtCedula.setText("");
+                            edtCedula.requestFocus();
+                            dialog.cancel();
+                        }
                     }
-
                 }
             });
             builder.show();
@@ -419,53 +453,57 @@ public class Agregar_Pacientes extends AppCompatActivity implements View.OnClick
                         query.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                    if(dataSnapshot.exists()){
+                                if(dataSnapshot.exists()){
+                                    new AlertDialog.Builder(Agregar_Pacientes.this)
+                                            .setTitle("Paciente ya registrado!")
+                                            .setMessage("El paciente ya habia sido registrado.")
+                                            .setCancelable(true)
+                                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    edtCedula.setText("");
+                                                    edtCedula.requestFocus();
+                                                    Intent intent = getIntent();
+                                                    finish();
+                                                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                                    startActivity(intent);
+                                                    dialog.cancel();
+                                                }
+                                            }).show();
+                                }else {
+                                    if (edtNombre.getText().toString().length() == 0) {
+                                        VACIO(edtNombre, ViewFocus);
+                                    } else if (edtApellido.getText().toString().length() == 0) {
+                                        VACIO(edtApellido, ViewFocus);
+                                    } else if (edtCorreo.getText().toString().length() == 0) {
+                                        VACIO(edtCorreo, ViewFocus);
+                                    } else if (edtTelefono.getText().toString().length() == 0) {
+                                        VACIO(edtTelefono, ViewFocus);
+                                    } else if (radioclickcp.equals("Vacio")) {
                                         new AlertDialog.Builder(Agregar_Pacientes.this)
-                                                .setTitle("Paciente ya registrado!")
-                                                .setMessage("El paciente ah sido registrado.")
-                                                .setCancelable(true)
-                                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                .setTitle("Seguro!")
+                                                .setMessage("Debe de elegir una opcion")
+                                                .setPositiveButton("si", new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialog, int which) {
-                                                        edtCedula.setText("");
-                                                        edtCedula.requestFocus();
                                                         dialog.cancel();
                                                     }
                                                 }).show();
+                                    } else if (radioclickcp.equals("Si") && edtSeguro.getText().toString().length() == 0) {
+                                        VACIO(edtSeguro, ViewFocus);
                                     }else {
-                                        if (edtNombre.getText().toString().length() == 0) {
-                                            VACIO(edtNombre, ViewFocus);
-                                        } else if (edtApellido.getText().toString().length() == 0) {
-                                            VACIO(edtApellido, ViewFocus);
-                                        } else if (edtCorreo.getText().toString().length() == 0) {
-                                            VACIO(edtCorreo, ViewFocus);
-                                        } else if (edtTelefono.getText().toString().length() == 0) {
-                                            VACIO(edtTelefono, ViewFocus);
-                                        } else if (radioclickcp.equals("Vacio")) {
-                                            new AlertDialog.Builder(Agregar_Pacientes.this)
-                                                    .setTitle("Seguro!")
-                                                    .setMessage("Debe de elegir una opcion")
-                                                    .setPositiveButton("si", new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialog, int which) {
-                                                            dialog.cancel();
-                                                        }
-                                                    }).show();
-                                        } else if (radioclickcp.equals("Si") && edtSeguro.getText().toString().length() == 0) {
-                                            VACIO(edtSeguro, ViewFocus);
-                                        }else {
-                                            mRegProgress.setTitle("Guardando Paciente");
-                                            mRegProgress.setMessage("Espere mientras se guarda el paciente!");
-                                            mRegProgress.setCanceledOnTouchOutside(false);
-                                            mRegProgress.setCancelable(false);
-                                            mRegProgress.show();
-                                            Agregar_Paciente();
-                                        }
+                                        mRegProgress.setTitle("Guardando Paciente");
+                                        mRegProgress.setMessage("Espere mientras se guarda el paciente!");
+                                        mRegProgress.setCanceledOnTouchOutside(false);
+                                        mRegProgress.setCancelable(false);
+                                        mRegProgress.show();
+                                        Agregar_Paciente();
                                     }
                                 }
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                }
+                            }
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
                         });
 
                     }
@@ -487,12 +525,12 @@ public class Agregar_Pacientes extends AppCompatActivity implements View.OnClick
             if(edtCorreo.getText().toString().length()==0){
                 correo ="No tiene";
             }else{
-              correo = edtCorreo.getText().toString().trim();
+                correo = edtCorreo.getText().toString().trim();
             }
             if(edtTelefono.getText().toString().length()==0){
-               telefono = "No tiene";
+                telefono = "No tiene";
             }else{
-               telefono = edtTelefono.getText().toString().trim();
+                telefono = edtTelefono.getText().toString().trim();
             }
             String Nss = edtSeguro.getText().toString().trim();
             String seguro = spSeguro.getSelectedItem().toString();
@@ -515,6 +553,13 @@ public class Agregar_Pacientes extends AppCompatActivity implements View.OnClick
                 Map tutor_agregado = new HashMap();
                 tutor_agregado.put(tutor, tutor_reg);
 
+                String s= String.valueOf(compruebaConexion(getApplicationContext()));
+                if(s.equals("false")) {
+                    mRegProgress.dismiss();
+                    Toast.makeText(Agregar_Pacientes.this, "Tutor registrado sin conexion", Toast.LENGTH_SHORT).show();
+                    edtNombre.setVisibility(View.GONE);
+                }
+
                 PacienteDatabase.updateChildren(tutor_agregado, new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
@@ -523,7 +568,7 @@ public class Agregar_Pacientes extends AppCompatActivity implements View.OnClick
                             Toast.makeText(Agregar_Pacientes.this, "Fallo el registrar. Por favor intentelo de nuevo.", Toast.LENGTH_SHORT).show();
                         } else {
                             mRegProgress.dismiss();
-                            Toast.makeText(Agregar_Pacientes.this, "tutor registrado", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Agregar_Pacientes.this, "Tutor registrado", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -549,6 +594,16 @@ public class Agregar_Pacientes extends AppCompatActivity implements View.OnClick
             Map paciente_agregado = new HashMap();
             paciente_agregado.put(pacientes, paciente_reg);
 
+            String s= String.valueOf(compruebaConexion(getApplicationContext()));
+            if(s.equals("false")) {
+                mRegProgress.dismiss();
+                Toast.makeText(Agregar_Pacientes.this, "Paciente registrado sin conexion", Toast.LENGTH_SHORT).show();
+                Intent intent = getIntent();
+                finish();
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+            }
+
             PacienteDatabase.updateChildren(paciente_agregado, new DatabaseReference.CompletionListener() {
                 @Override
                 public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
@@ -558,16 +613,42 @@ public class Agregar_Pacientes extends AppCompatActivity implements View.OnClick
                     } else {
                         mRegProgress.dismiss();
                         Toast.makeText(Agregar_Pacientes.this, "Paciente registrado", Toast.LENGTH_SHORT).show();
-                        Intent intent = getIntent();
-                        finish();
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(intent);
+                        edtCedula.setVisibility(View.VISIBLE);
+                        edtCedula.setText("");
+                        edtNombre.setText("");
+                        edtApellido.setText("");
+                        edtCorreo.setText("");
+                        edtTelefono.setText("");
+                        radioButtonCP.setChecked(false);
+                        spSexo.setSelection(0);
+                        spSeguro.setSelection(0);
+                        edtSeguro.setText("");
+                        cvSeguro.setVisibility(View.GONE);
+                        edtCedula.requestFocus();
+
                     }
                 }
             });
         }catch (Exception e){
             Toast.makeText(Agregar_Pacientes.this,"Error al guardar!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public static boolean compruebaConexion(Context context)
+    {
+        boolean connected = false;
+        ConnectivityManager connec = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        // Recupera todas las redes (tanto móviles como wifi)
+        NetworkInfo[] redes = connec.getAllNetworkInfo();
+
+        for (int i = 0; i < redes.length; i++) {
+            // Si alguna red tiene conexión, se devuelve true
+            if (redes[i].getState() == NetworkInfo.State.CONNECTED) {
+                connected = true;
+            }
+        }
+        return connected;
     }
 
     public  void VACIO(EditText campo, View vista){

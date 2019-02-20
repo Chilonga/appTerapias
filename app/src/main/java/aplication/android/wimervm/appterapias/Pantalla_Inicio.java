@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -49,6 +51,7 @@ public class Pantalla_Inicio extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private DatabaseReference mMedicoDatabase;
+    private DatabaseReference mSecretariaDatabase;
     private DatabaseReference PacienteDatabase;
     private FirebaseUser mCurrentUser;
     private FirebaseAuth mAuth;
@@ -62,10 +65,11 @@ public class Pantalla_Inicio extends AppCompatActivity
     final Calendar calendario = Calendar.getInstance();
     String fecha_calendario;
     int año=calendario.get(Calendar.YEAR);
-    int mes=calendario.get(Calendar.MONTH)+1;
+    int mes=calendario.get(Calendar.MONTH);
+    int mess=calendario.get(Calendar.MONTH)+1;
     int dias=calendario.get(Calendar.DAY_OF_MONTH);
     private ProgressDialog mCambioProgress;
-    String fecha_seleccionada=dias+"/"+mes+"/"+año;
+    String fecha_seleccionada=dias+"/"+mess+"/"+año;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +86,9 @@ public class Pantalla_Inicio extends AppCompatActivity
 
         citassDatabase = FirebaseDatabase.getInstance().getReference().child("Citas_Reservadas");
         citassDatabase.keepSynced(true);
+
+        mSecretariaDatabase = FirebaseDatabase.getInstance().getReference().child("Secretaria").child(current_uid);
+        mSecretariaDatabase.keepSynced(true);
 
         mCambioProgress = new ProgressDialog(Pantalla_Inicio.this);
         mCambioProgress.setTitle("Actualizando cita");
@@ -119,6 +126,7 @@ public class Pantalla_Inicio extends AppCompatActivity
             public void onClick(View view) {
                 Intent i=new Intent(getApplicationContext(),Reservar_Cita.class);
                 i.putExtra("fecha",fecha_seleccionada);
+                i.putExtra("fecha2",fecha_calendario);
                 startActivity(i);
             }
         });
@@ -235,22 +243,25 @@ public class Pantalla_Inicio extends AppCompatActivity
                                                 .setPositiveButton("si", new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(final DialogInterface dialog, int which) {
-
                                                         mCambioProgress.show();
 
-                                                        citassDatabase.child(users.getId()).child("estado").setValue("Cancelado").addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                            @Override
-                                                            public void onComplete(@NonNull Task<Void> task) {
-                                                                        if (task.isSuccessful()) {
-                                                                            mCambioProgress.dismiss();
-                                                                            dialog.cancel();
-                                                                        }else{
-                                                                            mCambioProgress.hide();
-                                                                            Toast.makeText(Pantalla_Inicio.this, "Necisita conexion a internet para poder iniciar sesion.", Toast.LENGTH_SHORT).show();
-                                                                        }
+                                                        String s= String.valueOf(compruebaConexion(getApplicationContext()));
+                                                        if(s.equals("false")) {
+                                                            mCambioProgress.dismiss();
+                                                        }
 
-                                                            }
-                                                        });
+                                                            citassDatabase.child(users.getId()).child("estado").setValue("Cancelado").addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                    if (task.isSuccessful()) {
+                                                                        mCambioProgress.dismiss();
+                                                                        dialog.cancel();
+                                                                    } else {
+                                                                        mCambioProgress.hide();
+                                                                        Toast.makeText(Pantalla_Inicio.this, "Necisita conexion a internet para poder iniciar sesion.", Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                }
+                                                            });
                                                     }
                                                 })
                                                 .setNegativeButton("no", new DialogInterface.OnClickListener() {
@@ -268,20 +279,24 @@ public class Pantalla_Inicio extends AppCompatActivity
                                                         public void onClick(final DialogInterface dialog, int which) {
 
                                                             mCambioProgress.show();
-
-                                                            citassDatabase.child(users.getId()).child("estado").setValue("Activo").addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                @Override
-                                                                public void onComplete(@NonNull Task<Void> task) {
-                                                                    if (task.isSuccessful()) {
-                                                                        mCambioProgress.dismiss();
-                                                                        dialog.cancel();
-                                                                    } else {
-                                                                        mCambioProgress.hide();
-                                                                        Toast.makeText(Pantalla_Inicio.this, "Necisita conexion a internet para poder iniciar sesion.", Toast.LENGTH_SHORT).show();
+                                                            String s= String.valueOf(compruebaConexion(getApplicationContext()));
+                                                            if(s.equals("false")) {
+                                                                mCambioProgress.dismiss();
+                                                            }
+                                                                citassDatabase.child(users.getId()).child("estado").setValue("Activo").addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                    @Override
+                                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                                        if (task.isSuccessful()) {
+                                                                            mCambioProgress.dismiss();
+                                                                            dialog.cancel();
+                                                                        } else {
+                                                                            mCambioProgress.hide();
+                                                                            Toast.makeText(Pantalla_Inicio.this, "Necisita conexion a internet para poder iniciar sesion.", Toast.LENGTH_SHORT).show();
+                                                                        }
                                                                     }
-                                                                }
-                                                            });
-                                                            dialog.cancel();
+                                                                });
+                                                                dialog.cancel();
+
                                                         }
                                                     })
                                                     .setNegativeButton("no", new DialogInterface.OnClickListener() {
@@ -328,19 +343,53 @@ public class Pantalla_Inicio extends AppCompatActivity
                 mMedicoDatabase.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            try {
+                                String name = dataSnapshot.child("nombre").getValue().toString();
+                                String apellido = dataSnapshot.child("apellido").getValue().toString();
+                                String correo = dataSnapshot.child("correo").getValue().toString();
 
-                        String name = dataSnapshot.child("nombre").getValue().toString();
-                        String apellido = dataSnapshot.child("apellido").getValue().toString();
-                        String correo = dataSnapshot.child("correo").getValue().toString();
+                                NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+                                View headerView = navigationView.getHeaderView(0);
 
-                        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-                        View headerView = navigationView.getHeaderView(0);
+                                TextView tvCorreo = (TextView) headerView.findViewById(R.id.tvCorreoHeader);
+                                TextView tvNombre = (TextView) headerView.findViewById(R.id.tvNombreHeader);
 
-                        TextView tvCorreo = (TextView) headerView.findViewById(R.id.tvCorreoHeader);
-                        TextView tvNombre= (TextView) headerView.findViewById(R.id.tvNombreHeader);
+                                tvNombre.setText("Dr. " + name + " " + apellido);
+                                tvCorreo.setText(correo);
+                            }catch (Exception e){
+                                Toast.makeText(Pantalla_Inicio.this,"Error", Toast.LENGTH_SHORT).show();
+                            }
+                        }else{
+                            mSecretariaDatabase.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        try {
+                                            String name = dataSnapshot.child("nombre").getValue().toString();
+                                            String apellido = dataSnapshot.child("apellido").getValue().toString();
+                                            String correo = dataSnapshot.child("correo").getValue().toString();
 
-                        tvNombre.setText(name+" "+apellido);
-                        tvCorreo.setText(correo);
+                                            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+                                            View headerView = navigationView.getHeaderView(0);
+
+                                            TextView tvCorreo = (TextView) headerView.findViewById(R.id.tvCorreoHeader);
+                                            TextView tvNombre = (TextView) headerView.findViewById(R.id.tvNombreHeader);
+
+                                            tvNombre.setText(" ");
+                                            tvCorreo.setText(correo);
+                                        }catch (Exception e){
+                                            Toast.makeText(Pantalla_Inicio.this,"Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    Toast.makeText(getApplicationContext(), "Error" + databaseError, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
                     }
 
                     @Override
@@ -450,4 +499,24 @@ public class Pantalla_Inicio extends AppCompatActivity
             userStatusView.setText(Procedimiento);
         }
     }
+
+
+    public static boolean compruebaConexion(Context context)
+    {
+        boolean connected = false;
+        ConnectivityManager connec = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        // Recupera todas las redes (tanto móviles como wifi)
+        NetworkInfo[] redes = connec.getAllNetworkInfo();
+
+        for (int i = 0; i < redes.length; i++) {
+            // Si alguna red tiene conexión, se devuelve true
+            if (redes[i].getState() == NetworkInfo.State.CONNECTED) {
+                connected = true;
+            }
+        }
+        return connected;
+    }
+
+
 }

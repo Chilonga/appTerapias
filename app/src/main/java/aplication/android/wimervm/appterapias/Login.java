@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +21,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class Login extends AppCompatActivity implements View.OnClickListener  {
 
@@ -30,6 +37,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener  {
     private ProgressDialog mLoginProgress;
     private TextView tvOLVIDO;
     private View ViewFocus = null;
+    private DatabaseReference mUser,mSecretaria;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +52,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener  {
         password = (EditText) findViewById(R.id.txtpass);
         btnIniciar = (Button) findViewById(R.id.btnLogin);
         tvOLVIDO=(TextView)findViewById(R.id.tv_Olvido);
+
+        mUser = FirebaseDatabase.getInstance().getReference().child("Medicos");
+
+        mSecretaria = FirebaseDatabase.getInstance().getReference().child("Secretaria");
 
         mLoginProgress = new ProgressDialog(this);
 
@@ -127,7 +140,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener  {
                         mLoginProgress.setMessage("Espere mientras se inicia sesion !");
                         mLoginProgress.setCanceledOnTouchOutside(false);
                         mLoginProgress.show();
-                        userLogin(email, pass);
+                        verificar_usuario(email, pass);
                     }
                 }
             }catch (Exception e){
@@ -137,5 +150,38 @@ public class Login extends AppCompatActivity implements View.OnClickListener  {
             Intent startIntent = new Intent(Login.this, olvido_pass.class);
             startActivity(startIntent);
         }
+    }
+
+    public void verificar_usuario(final String email, final String pass){
+        Query query = mUser.orderByChild("correo").equalTo(email);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    userLogin(email, pass);
+                } else {
+                    Query query = mSecretaria.orderByChild("correo").equalTo(email);
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                userLogin(email, pass);
+                            } else {
+                                Toast.makeText(Login.this,"El usuario no existe ", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Toast.makeText(getApplicationContext(), "Error" + databaseError, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), "Error" + databaseError, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

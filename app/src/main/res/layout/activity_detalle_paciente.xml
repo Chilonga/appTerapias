@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".detallePaciente">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/mytoolbar12"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/holo_blue_light"
+        android:elevation="0dp"
+        android:minHeight="185dp"
+        android:theme="@style/AppTheme"
+        app:contentInsetStart="72dp"
+        app:layout_collapseMode="pin"
+        app:layout_collapseParallaxMultiplier="0.8"
+        app:popupTheme="@style/AppTheme"
+        app:theme="@style/Toolbar"
+        app:titleTextColor="@android:color/background_light"></android.support.v7.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="39dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="100dp"
+        android:drawableLeft="@drawable/nombre"
+        android:drawablePadding="10dp"
+        android:text="Paciente:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvPacientede"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textView6"
+        android:layout_marginEnd="10dp"
+        android:layout_toEndOf="@+id/textView6"
+        android:text="TextView"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvCedulade"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvPacientede"
+        android:layout_below="@+id/textView6"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="20dp"
+        android:text="TextView"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView6"
+        android:layout_alignTop="@+id/tvCedulade"
+        android:drawableLeft="@drawable/cedula"
+        android:drawablePadding="10dp"
+        android:text="Cedula:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvSexode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvPacientede"
+        android:layout_below="@+id/tvCedulade"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="20dp"
+        android:text="TextView"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView6"
+        android:layout_alignTop="@+id/tvSexode"
+        android:drawableLeft="@drawable/sexo"
+        android:drawablePadding="10dp"
+        android:text="Sexo:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvSegurode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvPacientede"
+        android:layout_below="@+id/tvSexode"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="20dp"
+        android:text="TextView"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView6"
+        android:layout_alignTop="@+id/tvSegurode"
+        android:drawableLeft="@drawable/seguro"
+        android:drawablePadding="10dp"
+        android:text="Seguro:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvNsssde"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvPacientede"
+        android:layout_below="@+id/tvSegurode"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="20dp"
+        android:text="TextView"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView26"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView6"
+        android:layout_alignTop="@+id/tvNsssde"
+        android:drawableLeft="@drawable/nss"
+        android:drawablePadding="10dp"
+        android:text="Nss:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvCorreode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvPacientede"
+        android:layout_below="@+id/tvNsssde"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="20dp"
+        android:text="TextView"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView30"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView6"
+        android:layout_alignTop="@+id/tvCorreode"
+        android:drawableLeft="@drawable/email"
+        android:drawablePadding="10dp"
+        android:text="Correo:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvTelefonode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvPacientede"
+        android:layout_below="@+id/tvCorreode"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="20dp"
+        android:text="TextView"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView6"
+        android:layout_alignTop="@+id/tvTelefonode"
+        android:drawableLeft="@drawable/telefono"
+        android:drawablePadding="10dp"
+        android:text="Telefono:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnTutor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="133dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginStart="40dp"
+        android:background="@android:color/holo_blue_light"
+        android:text="Datos del tutor"
+        android:textAllCaps="false"
+        android:textColor="@android:color/background_light"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView6"
+        android:layout_alignTop="@+id/tvCedulade"
+        android:drawableLeft="@drawable/apellido"
+        android:drawablePadding="10dp"
+        android:text="Tutor:"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+</RelativeLayout>

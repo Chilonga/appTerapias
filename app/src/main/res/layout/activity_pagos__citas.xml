@@ -10,11 +10,11 @@
         android:id="@+id/btnGuardarCita"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_below="@+id/tvDevolver"
-        android:layout_marginEnd="20dp"
+        android:layout_alignParentStart="true"
         android:layout_marginStart="30dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
         android:background="@android:color/holo_blue_light"
         android:text="Realizar Pago"
         android:textAllCaps="false"
@@ -60,10 +60,11 @@
 
     <TextView
         android:id="@+id/tvNombrePago"
-        android:layout_width="match_parent"
+        android:layout_width="198dp"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/textView5"
         android:layout_marginEnd="20dp"
+        android:layout_marginStart="33dp"
         android:layout_toEndOf="@+id/textView5"
         android:text="Nombre"
         android:textSize="16sp" />
@@ -101,7 +102,7 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/tvSeguroPago"
         android:layout_below="@+id/tvSeguroPago"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="45dp"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="10dp"
         android:text="Nss"
@@ -124,19 +125,18 @@
 
     <Spinner
         android:id="@+id/spinnerTipoPago"
-        android:layout_width="match_parent"
+        android:layout_width="183dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/tvNssPago"
-        android:layout_marginStart="175dp" />
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/tvProcedeCi"
+        android:layout_marginTop="-5dp" />
 
     <TextView
         android:id="@+id/textView38"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView5"
         android:layout_alignTop="@+id/spinnerTipoPago"
-        android:layout_marginEnd="-160dp"
-        android:layout_toStartOf="@+id/spinnerTipoPago"
         android:drawableLeft="@drawable/ic_attach_money_black_24dp"
         android:drawablePadding="10dp"
         android:text="Tipo de pago:"
@@ -147,10 +147,10 @@
         android:id="@+id/edMontoCita"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/textView5"
         android:layout_below="@+id/textView38"
-        android:layout_marginEnd="20dp"
+        android:layout_alignStart="@+id/textView5"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
         android:drawableLeft="@drawable/ic_monetization_on_black_24dp"
         android:drawablePadding="10dp"
         android:ems="10"
@@ -163,10 +163,10 @@
         android:id="@+id/edMontoEfectivo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/textView5"
         android:layout_below="@+id/edMontoCita"
-        android:layout_marginEnd="20dp"
+        android:layout_alignStart="@+id/textView5"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
         android:drawableLeft="@drawable/ic_monetization_on_black_24dp"
         android:drawablePadding="10dp"
         android:ems="10"
@@ -179,10 +179,10 @@
         android:id="@+id/edMontoSeguro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/textView5"
         android:layout_below="@+id/edMontoEfectivo"
-        android:layout_marginEnd="20dp"
+        android:layout_alignStart="@+id/textView5"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
         android:drawableLeft="@drawable/ic_monetization_on_black_24dp"
         android:drawablePadding="10dp"
         android:ems="10"
@@ -191,17 +191,58 @@
         android:textSize="16sp"
         android:visibility="gone" />
 
+    <EditText
+        android:id="@+id/edNumafiliado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edMontoSeguro"
+        android:layout_alignStart="@+id/textView5"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="20dp"
+        android:drawableLeft="@drawable/seguro"
+        android:drawablePadding="10dp"
+        android:ems="10"
+        android:hint="Numero de afiliado"
+        android:inputType="number"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
     <TextView
         android:id="@+id/tvDevolver"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/edNumafiliado"
         android:layout_alignStart="@+id/textView5"
-        android:layout_below="@+id/edMontoSeguro"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="-2dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginTop="10dp"
         android:padding="5dp"
         android:text="Total a devolver"
         android:textSize="16sp"
         android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tvProcedeCi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvNombrePago"
+        android:layout_below="@+id/textView35"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="5dp"
+        android:text="Procedimiento"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView5"
+        android:layout_alignTop="@+id/tvProcedeCi"
+        android:drawableLeft="@drawable/consulta"
+        android:drawablePadding="10dp"
+        android:text="Procedimiento:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>

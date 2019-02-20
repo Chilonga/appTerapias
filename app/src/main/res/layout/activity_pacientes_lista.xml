@@ -39,6 +39,12 @@
         android:textStyle="bold"
         android:visibility="invisible" />
 
+    <com.miguelcatalan.materialsearchview.MaterialSearchView
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/MaterialSearchViewStyle"/>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fbRegistrar_pacientes"
         android:layout_width="wrap_content"

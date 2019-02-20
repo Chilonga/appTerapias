@@ -1,8 +1,11 @@
 package aplication.android.wimervm.appterapias;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -39,13 +42,13 @@ public class Pagos_Citas extends AppCompatActivity implements View.OnClickListen
     private TextView tvNombre,tvNss,tvSeguro;
     private Spinner spTipoPaggo;
     List<String> listMId= new ArrayList<String>();
-    private EditText edtMonto,edtEfectivo,edtSeguro;
+    private EditText edtMonto,edtEfectivo,edtSeguro,edtNumSeguro;
     private Button btnGuardar;
     private View ViewFocus = null;
     private ProgressDialog mRegProgress;
     private String idPaciente, idEstado;
     private DatabaseReference PagosDatabase,citassDatabase;
-    TextView tvDevolver;
+    private TextView tvDevolver,tvProcedimiento;
 
 
     @Override
@@ -70,7 +73,9 @@ public class Pagos_Citas extends AppCompatActivity implements View.OnClickListen
         edtMonto=(EditText)findViewById(R.id.edMontoCita);
         edtEfectivo=(EditText)findViewById(R.id.edMontoEfectivo);
         edtSeguro=(EditText)findViewById(R.id.edMontoSeguro);
+        edtNumSeguro=(EditText)findViewById(R.id.edNumafiliado);
         btnGuardar=(Button)findViewById(R.id.btnGuardarCita);
+        tvProcedimiento=(TextView)findViewById(R.id.tvProcedeCi);
         tvDevolver = (TextView) findViewById(R.id.tvDevolver);
 
         pacientesDatabase = FirebaseDatabase.getInstance().getReference().child("Pacientes").child(idPaciente);
@@ -78,6 +83,19 @@ public class Pagos_Citas extends AppCompatActivity implements View.OnClickListen
 
         citassDatabase = FirebaseDatabase.getInstance().getReference().child("Citas_Reservadas");
         citassDatabase.keepSynced(true);
+
+        citassDatabase.child(idEstado).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String procedimiento = dataSnapshot.child("procedimiento").getValue().toString();
+                tvProcedimiento.setText(procedimiento);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         PagosDatabase= FirebaseDatabase.getInstance().getReference();
         PagosDatabase.keepSynced(true);
@@ -116,10 +134,13 @@ public class Pagos_Citas extends AppCompatActivity implements View.OnClickListen
                     if (tipo.equals("Efectivo")) {
                         edtMonto.setVisibility(View.VISIBLE);
                         edtSeguro.setVisibility(View.GONE);
+                        edtNumSeguro.setVisibility(View.GONE);
                         edtEfectivo.setVisibility(View.VISIBLE);
                         btnGuardar.setVisibility(View.VISIBLE);
                         edtSeguro.setText("");
                         edtSeguro.setError(null);
+                        edtNumSeguro.setText("");
+                        edtNumSeguro.setError(null);
                         tvDevolver.setVisibility(View.GONE);
                     } else if (tvSeguro.getText().equals("No tiene") && tipo.equals("Efectivo y Seguro") || tvSeguro.getText().equals("No tiene") && tipo.equals("Seguro")){
                         edtMonto.setError(null);
@@ -142,6 +163,7 @@ public class Pagos_Citas extends AppCompatActivity implements View.OnClickListen
                         edtMonto.setVisibility(View.VISIBLE);
                         edtEfectivo.setVisibility(View.VISIBLE);
                         edtSeguro.setVisibility(View.VISIBLE);
+                        edtNumSeguro.setVisibility(View.VISIBLE);
                         btnGuardar.setVisibility(View.VISIBLE);
                     }else if(tipo.equals("Seguro")){
                         edtEfectivo.setText("");
@@ -150,6 +172,7 @@ public class Pagos_Citas extends AppCompatActivity implements View.OnClickListen
                         edtMonto.setVisibility(View.VISIBLE);
                         edtEfectivo.setVisibility(View.GONE);
                         edtSeguro.setVisibility(View.VISIBLE);
+                        edtNumSeguro.setVisibility(View.VISIBLE);
                         btnGuardar.setVisibility(View.VISIBLE);
                     }else  if(tipo.equals("Gratis")){
                         tvDevolver.setVisibility(View.GONE);
@@ -158,8 +181,10 @@ public class Pagos_Citas extends AppCompatActivity implements View.OnClickListen
                         edtSeguro.setText("");
                         edtEfectivo.setError(null);
                         edtSeguro.setError(null);
+                        edtNumSeguro.setError(null);
                         edtEfectivo.setVisibility(View.GONE);
                         edtSeguro.setVisibility(View.GONE);
+                        edtNumSeguro.setVisibility(View.GONE);
                         btnGuardar.setVisibility(View.VISIBLE);
                         new android.app.AlertDialog.Builder(Pagos_Citas.this)
                                 .setTitle("Genial!")
@@ -252,7 +277,11 @@ public class Pagos_Citas extends AppCompatActivity implements View.OnClickListen
                 VACIO(edtMonto, ViewFocus);
             }else if(pago.equals("Seguro") && edtSeguro.getText().toString().length()==0 && !tvSeguro.getText().equals("No tiene")){
                     VACIO(edtSeguro, ViewFocus);
-            } else if(pago.equals("Seguro") && edtSeguro.getText().toString().length()==0 && tvSeguro.getText().equals("No tiene")){
+            } else if(pago.equals("Seguro") && edtNumSeguro.getText().toString().length()==0 && !tvSeguro.getText().equals("No tiene")){
+                VACIO(edtNumSeguro, ViewFocus);
+            }else if(pago.equals("Seguro") && edtSeguro.getText().toString().length()==0 && tvSeguro.getText().equals("No tiene")){
+                Toast.makeText(Pagos_Citas.this,"Elija otro tipo de pago", Toast.LENGTH_SHORT).show();
+            }else if(pago.equals("Seguro") && edtNumSeguro.getText().toString().length()==0 && tvSeguro.getText().equals("No tiene")){
                 Toast.makeText(Pagos_Citas.this,"Elija otro tipo de pago", Toast.LENGTH_SHORT).show();
             }else if(pago.equals("Efectivo") && edtEfectivo.getText().toString().length()==0){
                 VACIO(edtEfectivo, ViewFocus);
@@ -362,12 +391,13 @@ public class Pagos_Citas extends AppCompatActivity implements View.OnClickListen
         String efectivo=edtEfectivo.getText().toString();
         String seguro=edtSeguro.getText().toString();
         String pago= spTipoPaggo.getSelectedItem().toString();
+        String numseguro= edtNumSeguro.getText().toString();
 
         mRegProgress.setTitle("Relizando Pago");
         mRegProgress.setMessage("Espere mientras se realiza el pago!");
         mRegProgress.setCanceledOnTouchOutside(false);
         mRegProgress.setCancelable(false);
-        mRegProgress.show();
+     //   mRegProgress.show();
 
         DatabaseReference pacientekey = PagosDatabase.child("Pago_Cita").push();
 
@@ -385,9 +415,11 @@ public class Pagos_Citas extends AppCompatActivity implements View.OnClickListen
         }else  if(pago.equals("Efectivo y Seguro")){
             pago_reg.put("monto_efectivo",efectivo);
             pago_reg.put("monto_seguro", seguro);
+            pago_reg.put("numero_afiliado", numseguro);
         }else  if(pago.equals("Seguro")){
             pago_reg.put("monto_efectivo","0");
             pago_reg.put("monto_seguro", seguro);
+            pago_reg.put("numero_afiliado", numseguro);
         }else  if(pago.equals("Gratis")){
             pago_reg.put("monto_efectivo","0");
             pago_reg.put("monto_seguro", "0");
@@ -415,11 +447,11 @@ public class Pagos_Citas extends AppCompatActivity implements View.OnClickListen
                                         if (task.isSuccessful()) {
                                             mRegProgress.dismiss();
                                             finish();
-                                            Intent intent = new Intent(getApplicationContext(), detallePago.class);
-                                            intent.putExtra("id_Pago", pagopush.toString());
-                                            intent.putExtra("id_CITA", idEstado);
-                                            intent.putExtra("id", idPaciente);
-                                            startActivity(intent);
+                                           // Intent intent = new Intent(getApplicationContext(), detallePago.class);
+                                            //intent.putExtra("id_Pago", pagopush.toString());
+                                           // intent.putExtra("id_CITA", idEstado);
+                                           // intent.putExtra("id", idPaciente);
+                                           // startActivity(intent);
                                             Toast.makeText(Pagos_Citas.this, "Pago realizado", Toast.LENGTH_SHORT).show();
                                         } else {
                                             Toast.makeText(Pagos_Citas.this, "Error.", Toast.LENGTH_SHORT).show();
@@ -434,7 +466,37 @@ public class Pagos_Citas extends AppCompatActivity implements View.OnClickListen
                 }
             }
         });
+
+        String s= String.valueOf(compruebaConexion(getApplicationContext()));
+        if(s.equals("false")) {
+            mRegProgress.dismiss();
+            finish();
+            Intent intent = new Intent(getApplicationContext(), detallePago.class);
+            intent.putExtra("id_Pago", pagopush.toString());
+            intent.putExtra("id_CITA", idEstado);
+            intent.putExtra("id", idPaciente);
+            startActivity(intent);
+            Toast.makeText(Pagos_Citas.this, "Pago realizado", Toast.LENGTH_SHORT).show();
+        }
     }
+
+    public static boolean compruebaConexion(Context context)
+    {
+        boolean connected = false;
+        ConnectivityManager connec = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        // Recupera todas las redes (tanto móviles como wifi)
+        NetworkInfo[] redes = connec.getAllNetworkInfo();
+
+        for (int i = 0; i < redes.length; i++) {
+            // Si alguna red tiene conexión, se devuelve true
+            if (redes[i].getState() == NetworkInfo.State.CONNECTED) {
+                connected = true;
+            }
+        }
+        return connected;
+    }
+
 
     public  void VACIO(EditText campo, View vista){
         try {

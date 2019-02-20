@@ -22,15 +22,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 public class Pacientes_lista extends AppCompatActivity {
 
     private DatabaseReference pacientesDatabase;
+    private DatabaseReference TutorDatabase;
     FirebaseAuth mAuth;
     private LinearLayoutManager mLayoutManager;
     private RecyclerView mUsersList;
     private TextView txtResultado;
     String online_user_id;
+    MaterialSearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +51,12 @@ public class Pacientes_lista extends AppCompatActivity {
             pacientesDatabase = FirebaseDatabase.getInstance().getReference().child("Pacientes");
             pacientesDatabase.keepSynced(true);
 
+            TutorDatabase = FirebaseDatabase.getInstance().getReference().child("Tutor");
+            TutorDatabase.keepSynced(true);
+
             txtResultado = (TextView) findViewById(R.id.textViewResultados7);
+
+            searchView=(MaterialSearchView)findViewById(R.id.search_view);
 
             mLayoutManager = new LinearLayoutManager(this);
             mLayoutManager = new LinearLayoutManager(this);
@@ -93,60 +101,38 @@ public class Pacientes_lista extends AppCompatActivity {
         });
     }
 
-    private void buscador(String texto){
-        try {
-
-            final Query query=pacientesDatabase.orderByChild("nombre").startAt(texto).endAt(texto+"\uf8ff");
-
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.exists()){
-                        txtResultado.setVisibility(View.INVISIBLE);
-                    }else{
-                        txtResultado.setVisibility(View.VISIBLE);
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-            FirebaseRecyclerAdapter<Pacientes, Pacientes_lista.UsersViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Pacientes, UsersViewHolder>(
-                    Pacientes.class,
-                    R.layout.pacientes,
-                    Pacientes_lista.UsersViewHolder.class,
-                    query
-            )  {
-                @Override
-                protected void populateViewHolder(final Pacientes_lista.UsersViewHolder usersViewHolder, final Pacientes users, final int position) {
-                    usersViewHolder.setNombre(users.getNombre()+ " "+users.getApellido());
-                    usersViewHolder.setCedula(users.getCedula());
-
-                    usersViewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            //      Intent intent = new Intent(getApplicationContext(), Detalle_Cliente.class);
-                            //     intent.putExtra("id", users.getId());
-                            //   startActivity(intent);
-                        }
-                    });
-                }
-            };
-            mUsersList.setAdapter(firebaseRecyclerAdapter);
-        }catch (Exception e){
-            Toast.makeText(Pacientes_lista.this, "Error al mostrar!!! ", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     @Override
     protected void onStart() {
         super.onStart();
+
+        buscador("lista");
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        try {
+            if (searchView.isSearchOpen()) {
+                searchView.closeSearch();
+            } else {
+                super.onBackPressed();
+            }
+        }catch (Exception e){
+            Toast.makeText(Pacientes_lista.this,"Error!!!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void buscador(String texto){
         try {
 
-            final Query query=pacientesDatabase;
+            final Query query;
+            if(texto.equals("lista")){
+                query=pacientesDatabase.orderByChild("nombre");
+
+            }else{
+                query=pacientesDatabase.orderByChild("nombre").startAt(texto).endAt(texto+"\uf8ff");
+            }
 
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -173,14 +159,41 @@ public class Pacientes_lista extends AppCompatActivity {
                 @Override
                 protected void populateViewHolder(final Pacientes_lista.UsersViewHolder usersViewHolder, final Pacientes users, final int position) {
                     usersViewHolder.setNombre(users.getNombre()+ " "+users.getApellido());
-                    usersViewHolder.setCedula(users.getCedula());
+
+                    if(users.getCedula().equals("No tiene")){
+                        TutorDatabase.child(users.getId_tutor()).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                String name = dataSnapshot.child("nombre").getValue().toString();
+                                String apellido = dataSnapshot.child("apellido").getValue().toString();
+                                String cedula = dataSnapshot.child("cedula").getValue().toString();
+                                usersViewHolder.setTutor(name+" "+apellido,cedula);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                    }else{
+                        usersViewHolder.setCedula(users.getCedula());
+                    }
+
+                    usersViewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                             Intent intent = new Intent(getApplicationContext(), detallePaciente.class);
+                             intent.putExtra("id", users.getId());
+                             startActivity(intent);
+                        }
+                    });
+
                 }
             };
             mUsersList.setAdapter(firebaseRecyclerAdapter);
         }catch (Exception e){
             Toast.makeText(Pacientes_lista.this, "Error al mostrar!!! ", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     public static class UsersViewHolder extends RecyclerView.ViewHolder {
@@ -193,6 +206,14 @@ public class Pacientes_lista extends AppCompatActivity {
             mView = itemView;
         }
 
+        public void setTutor(String tutor,String cedula){
+            TextView userStatusView = (TextView) mView.findViewById(R.id.txtCedulaPacientes);
+            TextView userStatuView = (TextView) mView.findViewById(R.id.txtCedula);
+            // TextView tutorStatuView = (TextView) mView.findViewById(R.id.txtCedulaTutor);
+            userStatuView.setText("Tutor:");
+            userStatusView.setText(tutor);
+            //  tutorStatuView.setText(cedula);
+        }
 
         public void setCedula(String cedula){
             TextView userStatusView = (TextView) mView.findViewById(R.id.txtCedulaPacientes);
@@ -208,8 +229,23 @@ public class Pacientes_lista extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.buscar, menu);
+        MenuItem item=menu.findItem(R.id.buscar);
+        searchView.setMenuItem(item);
+        searchView.setHint("Ingrese el nombre del paciente");
+        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                buscador(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                buscador(query);
+                return true;
+            }
+        });
         return true;
     }
 

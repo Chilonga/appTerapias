@@ -51,12 +51,17 @@
         <activity
             android:name=".Pagos_Citas"
             android:label="Pago Cita"
-            android:windowSoftInputMode="stateAlwaysHidden"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden">
+        </activity>
+        <activity
+            android:name=".detallePago"
+            android:label="Detalle del pago"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".detallePago"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:label="Detalle del pago">
+        <activity android:name=".detallePaciente"
+            android:label="Detalle del paciente"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 

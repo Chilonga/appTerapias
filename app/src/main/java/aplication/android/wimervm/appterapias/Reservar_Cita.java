@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -67,74 +69,87 @@ public class Reservar_Cita extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_seleccionar_paciente_cita);
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_seleccionar_paciente_cita);
 
-        fecha_calendario= String.valueOf(dias+"/"+mes+"/"+año);
+            fecha_calendario = String.valueOf(dias + "/" + mes + "/" + año);
 
-        fecha_selecc= String.valueOf(dias+"/"+mesC+"/"+año);
+            mRegProgress = new ProgressDialog(this);
 
-        mRegProgress = new ProgressDialog(this);
+            final Toolbar toolbar = (Toolbar) findViewById(R.id.mytoolbar3);
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.mytoolbar3);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            mAuth = FirebaseAuth.getInstance();
+            online_user_id = mAuth.getCurrentUser().getUid();
 
-        mAuth = FirebaseAuth.getInstance();
-        online_user_id = mAuth.getCurrentUser().getUid();
+            pacientesDatabase = FirebaseDatabase.getInstance().getReference().child("Pacientes");
+            pacientesDatabase.keepSynced(true);
 
-        pacientesDatabase = FirebaseDatabase.getInstance().getReference().child("Pacientes");
-        pacientesDatabase.keepSynced(true);
+            TutorDatabase = FirebaseDatabase.getInstance().getReference().child("Tutor");
+            TutorDatabase.keepSynced(true);
 
-        TutorDatabase = FirebaseDatabase.getInstance().getReference().child("Tutor");
-        TutorDatabase.keepSynced(true);
+            Intent i = this.getIntent();
+            fecha = i.getExtras().getString("fecha");
+            String fecha2 = i.getExtras().getString("fecha2");
 
-        Intent i = this.getIntent();
-        fecha = i.getExtras().getString("fecha");
+            fecha_selecc = fecha2;
 
-        CitaDatabase = FirebaseDatabase.getInstance().getReference();
-        CitaDatabase.keepSynced(true);
+            CitaDatabase = FirebaseDatabase.getInstance().getReference();
+            CitaDatabase.keepSynced(true);
 
-        txtResultado = (TextView) findViewById(R.id.textViewResultados8);
+            txtResultado = (TextView) findViewById(R.id.textViewResultados8);
 
-        searchView=(MaterialSearchView)findViewById(R.id.search_view);
+            searchView = (MaterialSearchView) findViewById(R.id.search_view);
 
-        mLayoutManager = new LinearLayoutManager(this);
-        mLayoutManager = new LinearLayoutManager(this);
-        mUsersList = (RecyclerView) findViewById(R.id.recicler_pacientes_seleccion);
-        mUsersList.setHasFixedSize(true);
-        mUsersList.setLayoutManager(mLayoutManager);
+            mLayoutManager = new LinearLayoutManager(this);
+            mLayoutManager = new LinearLayoutManager(this);
+            mUsersList = (RecyclerView) findViewById(R.id.recicler_pacientes_seleccion);
+            mUsersList.setHasFixedSize(true);
+            mUsersList.setLayoutManager(mLayoutManager);
+        }catch (Exception e){
+            txtResultado.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     protected void onStart() {
-        super.onStart();
+        try {
+            super.onStart();
 
-        buscar("lista");
-
+            buscar("lista");
+        }catch (Exception e){
+            txtResultado.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     protected void onResume() {
-        super.onResume();
+        try {
+            super.onResume();
 
-        final Query query=pacientesDatabase;
+            final Query query = pacientesDatabase;
 
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    txtResultado.setVisibility(View.INVISIBLE);
-                }else{
-                    txtResultado.setVisibility(View.VISIBLE);
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        txtResultado.setVisibility(View.INVISIBLE);
+                    } else {
+                        txtResultado.setVisibility(View.VISIBLE);
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    txtResultado.setVisibility(View.VISIBLE);
 
-            }
-        });
+                }
+            });
+        }catch (Exception e){
+            txtResultado.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -284,7 +299,7 @@ public class Reservar_Cita extends AppCompatActivity {
                     mRegProgress.setMessage("Espere mientras se reserva la cita!");
                     mRegProgress.setCanceledOnTouchOutside(false);
                     mRegProgress.setCancelable(false);
-                    mRegProgress.show();
+                  //  mRegProgress.show();
                     Agregar_cita(id,hora,procedimiento,fecha,myFecha);
                 }
             });
@@ -311,6 +326,13 @@ public class Reservar_Cita extends AppCompatActivity {
 
     private void Agregar_cita(String idPaciente, String hora, String procedimiento,String fecha,String fechaCalendar){
         try {
+
+            String s= String.valueOf(compruebaConexion(getApplicationContext()));
+            if(s.equals("false")) {
+                mRegProgress.dismiss();
+                Toast.makeText(Reservar_Cita.this, "Cita reservada sin conexion", Toast.LENGTH_SHORT).show();
+            }
+
             DatabaseReference clientekey = CitaDatabase.child("Citas_Reservadas").push();
 
             String clientepush = clientekey.getKey();
@@ -403,6 +425,7 @@ public class Reservar_Cita extends AppCompatActivity {
                     int monthh=month+1;
                     fecha_seleccionada=dayOfMonth+"/"+monthh+"/"+year;
                     fecha_selecc=dayOfMonth+"/"+month+"/"+year;
+               //     Toast.makeText(Reservar_Cita.this, fecha_selecc, Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -483,5 +506,23 @@ public class Reservar_Cita extends AppCompatActivity {
             TextView userStatusView = (TextView) mView.findViewById(R.id.txtPaciente);
             userStatusView.setText(nombre);
         }
+    }
+
+
+    public static boolean compruebaConexion(Context context)
+    {
+        boolean connected = false;
+        ConnectivityManager connec = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        // Recupera todas las redes (tanto móviles como wifi)
+        NetworkInfo[] redes = connec.getAllNetworkInfo();
+
+        for (int i = 0; i < redes.length; i++) {
+            // Si alguna red tiene conexión, se devuelve true
+            if (redes[i].getState() == NetworkInfo.State.CONNECTED) {
+                connected = true;
+            }
+        }
+        return connected;
     }
 }
