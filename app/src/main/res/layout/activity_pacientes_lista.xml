@@ -33,7 +33,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="83dp"
         android:layout_weight="1"
-        android:text="No tiene clientes agregados"
+        android:text="No tiene pacientes agregados"
         android:textAlignment="center"
         android:textSize="24sp"
         android:textStyle="bold"

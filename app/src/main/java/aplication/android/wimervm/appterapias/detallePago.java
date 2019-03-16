@@ -18,7 +18,7 @@ import com.google.firebase.database.ValueEventListener;
 public class detallePago extends AppCompatActivity {
 
     private DatabaseReference pacientesDatabase,citassDatabase,PagoDatabase;
-    private TextView tvNombrep,tvpseguro,tvpnss,tvProcedP,tvpPago,tvMcita,tvFcita,tvMseguro,tvDveu,tvpfecha,tvPhora;
+    private TextView tvNombrep,tvpseguro,tvpnss,tvProcedP,tvpPago,tvMcita,tvFcita,tvMseguro,tvDveu,tvpfecha,tvPhora,tvAfiliado;
 
 
     @Override
@@ -40,6 +40,7 @@ public class detallePago extends AppCompatActivity {
             tvpseguro = (TextView) findViewById(R.id.tvSegurop);
             tvpnss = (TextView) findViewById(R.id.tvNssp);
             tvProcedP = (TextView) findViewById(R.id.tvProcedP);
+            tvAfiliado = (TextView) findViewById(R.id.tvAfiliado);
             tvpPago = (TextView) findViewById(R.id.tvpPago);
             tvMcita = (TextView) findViewById(R.id.tvMcita);
             tvFcita = (TextView) findViewById(R.id.tvFcita);
@@ -104,13 +105,15 @@ public class detallePago extends AppCompatActivity {
                     String monto_devuelto = dataSnapshot.child("monto_devuelto").getValue().toString();
                     String monto_efectivo = dataSnapshot.child("monto_efectivo").getValue().toString();
                     String monto_seguro = dataSnapshot.child("monto_seguro").getValue().toString();
+                    String num_afiliado = dataSnapshot.child("numero_afiliado").getValue().toString();
+
 
                     tvpPago.setText(tipo);
                     tvMcita.setText(monto_cita);
                     tvFcita.setText(monto_efectivo);
                     tvMseguro.setText(monto_seguro);
                     tvDveu.setText(monto_devuelto);
-
+                    tvAfiliado.setText(num_afiliado);
                 }
 
                 @Override
